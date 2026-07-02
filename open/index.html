@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Open in Zangetsu</title>
+  <meta name="robots" content="noindex" />
+  <style>
+    :root {
+      --void: #08070b; --panel: #100e15; --edge: #241f2e;
+      --blood: #ff2d4f; --moon: #f3f1f7; --ash: #857f92;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: var(--void); color: var(--moon); padding: 24px;
+      font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    .card {
+      width: 100%; max-width: 400px; background: var(--panel);
+      border: 1px solid var(--edge); border-radius: 20px; padding: 34px 28px;
+      text-align: center; box-shadow: 0 30px 80px -20px #000;
+    }
+    .brand { font-size: 26px; font-weight: 800; letter-spacing: 3px; }
+    .brand span { color: var(--blood); }
+    .title { font-size: 17px; font-weight: 600; margin: 22px 0 6px; }
+    .lede { color: var(--ash); font-size: 14px; line-height: 1.5; }
+    .spinner {
+      width: 26px; height: 26px; margin: 22px auto 0; border-radius: 50%;
+      border: 3px solid var(--edge); border-top-color: var(--blood);
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .btns { margin-top: 24px; display: none; flex-direction: column; gap: 10px; }
+    a.btn, button.btn {
+      display: block; width: 100%; padding: 13px; border-radius: 12px; border: 1px solid var(--edge);
+      font-size: 15px; font-weight: 600; cursor: pointer; text-decoration: none;
+      background: var(--panel); color: var(--moon); font-family: inherit;
+    }
+    a.primary { background: var(--blood); border-color: var(--blood); color: #fff; }
+    @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand">ZANGE<span>&dagger;</span>SU</div>
+    <div class="title" id="title">this title</div>
+    <p class="lede" id="lede">Opening in the Zangetsu app…</p>
+    <div class="spinner" id="spinner"></div>
+    <div class="btns" id="btns">
+      <button class="btn primary" id="openBtn" style="background:var(--blood);border-color:var(--blood);color:#fff">Open in app</button>
+      <a class="btn primary" href="../">Get Zangetsu</a>
+    </div>
+  </div>
+
+  <script>
+    var params = new URLSearchParams(location.search);
+    var d = params.get("d");
+    var t = params.get("t") || "this title";
+    document.getElementById("title").textContent = t;
+
+    var opened = false;
+    // If the app takes over, the page is hidden/backgrounded — don't show fallback.
+    document.addEventListener("visibilitychange", function () { if (document.hidden) opened = true; });
+    window.addEventListener("pagehide", function () { opened = true; });
+
+    function tryApp() {
+      if (!d) return;
+      location.href = "zangetsu://open?d=" + encodeURIComponent(d) + "&t=" + encodeURIComponent(t);
+    }
+
+    function showFallback(msg) {
+      document.getElementById("spinner").style.display = "none";
+      document.getElementById("lede").textContent = msg;
+      document.getElementById("btns").style.display = "flex";
+    }
+
+    if (d) {
+      tryApp();
+      // App didn't take over within ~1.5s → it's probably not installed.
+      setTimeout(function () {
+        if (!opened) showFallback("Don't have the app? Get Zangetsu to watch “" + t + "”.");
+      }, 1500);
+    } else {
+      showFallback("Get Zangetsu to start watching.");
+    }
+
+    document.getElementById("openBtn").addEventListener("click", tryApp);
+  </script>
+</body>
+</html>
