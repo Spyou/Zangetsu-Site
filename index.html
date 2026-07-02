@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zangetsu — Free anime, movies & TV for Android</title>
+  <meta name="description" content="Zangetsu is a free Android app for streaming anime, movies and TV — on your phone and your TV. Up to 4K HDR, offline downloads, no ads." />
+  <meta property="og:title" content="Zangetsu" />
+  <meta property="og:description" content="Anime, movies & TV — streamed free on your phone and your TV." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Inter:wght@400;500;600&family=Shippori+Mincho:wght@700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --void: #08070b; --panel: #100e15; --panel-2: #15121d; --edge: #241f2e;
+      --blood: #ff2d4f; --blood-2: #a80d24; --moon: #f3f1f7; --ash: #857f92;
+      --glow: rgba(255, 45, 79, 0.42);
+      --display: "Archivo", sans-serif; --body: "Inter", sans-serif;
+      --mono: "Space Mono", monospace; --jp: "Shippori Mincho", serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--void); color: var(--moon); font-family: var(--body);
+      line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--blood); color: #fff; }
+    :focus-visible { outline: 2px solid var(--blood); outline-offset: 3px; }
+    .wrap { width: min(1140px, 90vw); margin: 0 auto; }
+    .mono { font-family: var(--mono); }
+
+    /* ── Nav ─────────────────────────────────────────────── */
+    .nav {
+      position: sticky; top: 0; z-index: 30;
+      backdrop-filter: blur(14px); background: rgba(8, 7, 11, 0.72);
+      border-bottom: 1px solid var(--edge);
+    }
+    .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { font-family: var(--display); font-weight: 900; font-size: 22px; letter-spacing: 3px; }
+    .logo b { color: var(--blood); font-weight: 900; }
+    .nav-links { display: flex; gap: 30px; align-items: center; }
+    .nav-links a { font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ash); transition: color 0.2s; }
+    .nav-links a:hover { color: var(--moon); }
+    .nav-cta {
+      font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 1px;
+      color: var(--blood); border: 1px solid var(--blood); padding: 8px 16px; border-radius: 8px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-cta:hover { background: var(--blood); color: #fff; }
+    @media (max-width: 760px) { .nav-links a:not(.nav-cta) { display: none; } }
+
+    /* ── Hero ────────────────────────────────────────────── */
+    .hero { position: relative; padding: clamp(70px, 12vw, 130px) 0 clamp(60px, 9vw, 110px); overflow: hidden; }
+    .kanji {
+      position: absolute; right: -2vw; top: 50%; transform: translateY(-50%);
+      font-family: var(--jp); font-size: clamp(180px, 40vw, 560px); line-height: 0.82;
+      writing-mode: vertical-rl; color: #fff; opacity: 0.035; user-select: none;
+      pointer-events: none; letter-spacing: -0.05em;
+    }
+    .hero-grid { position: relative; display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 40px; align-items: center; }
+    @media (max-width: 880px) { .hero-grid { grid-template-columns: 1fr; } }
+    .eyebrow {
+      font-family: var(--mono); font-size: 13px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--blood); display: inline-flex; align-items: center; gap: 10px; margin-bottom: 22px;
+    }
+    .eyebrow .jp { font-family: var(--jp); font-size: 17px; letter-spacing: 0; }
+    h1.title {
+      font-family: var(--display); font-weight: 900; font-size: clamp(58px, 12vw, 150px);
+      line-height: 0.86; letter-spacing: -0.02em; margin-bottom: 8px;
+    }
+    h1.title .cut { color: var(--blood); }
+    .lede { font-size: clamp(16px, 2.1vw, 20px); color: var(--ash); max-width: 30ch; margin: 22px 0 34px; }
+    .lede b { color: var(--moon); font-weight: 600; }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 12px; font-weight: 600; font-size: 16px;
+      padding: 15px 26px; border-radius: 12px; border: 1px solid transparent; cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.25s, background 0.2s; background: none; color: inherit;
+    }
+    .btn-primary { background: var(--blood); color: #fff; box-shadow: 0 10px 34px -8px var(--glow); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 44px -6px var(--glow); }
+    .btn-primary .ver { font-family: var(--mono); font-size: 12px; opacity: 0.85; padding-left: 10px; border-left: 1px solid rgba(255, 255, 255, 0.35); }
+    .btn-ghost { border-color: var(--edge); color: var(--ash); }
+    .btn-ghost:hover { border-color: var(--moon); color: var(--moon); }
+    .hero-meta { margin-top: 20px; font-family: var(--mono); font-size: 12px; color: var(--ash); letter-spacing: 0.5px; }
+    .hero-meta span { color: var(--blood); }
+
+    /* crescent moon signature */
+    .moon-stage { display: flex; justify-content: center; align-items: center; position: relative; }
+    .moon {
+      width: clamp(220px, 32vw, 400px); aspect-ratio: 1; border-radius: 50%;
+      background: radial-gradient(circle at 50% 45%, #ff6b80 0, var(--blood) 34%, var(--blood-2) 66%, #3a0410 100%);
+      -webkit-mask: radial-gradient(circle at 66% 38%, transparent 0 51%, #000 53%);
+      mask: radial-gradient(circle at 66% 38%, transparent 0 51%, #000 53%);
+      filter: drop-shadow(0 0 60px var(--glow)) drop-shadow(0 0 130px rgba(255, 45, 79, 0.25));
+      animation: breathe 7s ease-in-out infinite;
+    }
+    .slash {
+      position: absolute; width: 150%; height: 2px; left: -25%; top: 46%;
+      background: linear-gradient(90deg, transparent, var(--blood) 45%, #fff 50%, var(--blood) 55%, transparent);
+      transform: rotate(-24deg); filter: blur(0.4px); opacity: 0.85;
+    }
+    @keyframes breathe { 50% { filter: drop-shadow(0 0 84px var(--glow)) drop-shadow(0 0 150px rgba(255, 45, 79, 0.3)); } }
+
+    /* ── Section shell ───────────────────────────────────── */
+    .section { padding: clamp(64px, 10vw, 118px) 0; position: relative; }
+    .sec-head { display: flex; align-items: baseline; gap: 18px; margin-bottom: 46px; flex-wrap: wrap; }
+    .sec-tag { font-family: var(--mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--blood); }
+    .sec-title { font-family: var(--display); font-weight: 800; font-size: clamp(30px, 5vw, 52px); letter-spacing: -0.02em; line-height: 1; }
+    .rule { height: 1px; background: linear-gradient(90deg, var(--blood), transparent); border: 0; }
+
+    /* ── Features ────────────────────────────────────────── */
+    .feat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--edge); border: 1px solid var(--edge); border-radius: 16px; overflow: hidden; }
+    @media (max-width: 900px) { .feat-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .feat-grid { grid-template-columns: 1fr; } }
+    .feat { background: var(--panel); padding: 28px 24px; transition: background 0.25s; }
+    .feat:hover { background: var(--panel-2); }
+    .feat .ic { width: 34px; height: 34px; color: var(--blood); margin-bottom: 16px; }
+    .feat h3 { font-family: var(--display); font-weight: 700; font-size: 17px; letter-spacing: 0.2px; margin-bottom: 7px; }
+    .feat p { font-size: 14px; color: var(--ash); line-height: 1.5; }
+
+    /* ── Platforms (phone & TV) ──────────────────────────── */
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--edge); border: 1px solid var(--edge); border-radius: 16px; overflow: hidden; }
+    @media (max-width: 720px) { .split { grid-template-columns: 1fr; } }
+    .split > div { background: var(--panel); padding: clamp(30px, 5vw, 52px); }
+    .split .k { font-family: var(--mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--blood); }
+    .split h3 { font-family: var(--display); font-weight: 800; font-size: clamp(24px, 3.4vw, 34px); margin: 12px 0 12px; letter-spacing: -0.01em; }
+    .split p { color: var(--ash); font-size: 15px; }
+
+    /* ── Download ────────────────────────────────────────── */
+    .dl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    @media (max-width: 760px) { .dl-grid { grid-template-columns: 1fr; } }
+    .dl-card {
+      background: var(--panel); border: 1px solid var(--edge); border-radius: 16px; padding: 26px 24px;
+      display: flex; flex-direction: column; gap: 6px; transition: border-color 0.2s, transform 0.15s;
+    }
+    .dl-card:hover { border-color: var(--blood); transform: translateY(-3px); }
+    .dl-card.best { border-color: var(--blood); }
+    .dl-card .abi { font-family: var(--mono); font-size: 12px; color: var(--blood); letter-spacing: 1px; }
+    .dl-card h4 { font-family: var(--display); font-weight: 700; font-size: 20px; }
+    .dl-card .desc { font-size: 13.5px; color: var(--ash); flex: 1; margin: 4px 0 16px; }
+    .dl-card .size { font-family: var(--mono); font-size: 12px; color: var(--ash); }
+    .dl-link {
+      margin-top: 14px; display: inline-flex; justify-content: center; gap: 9px; align-items: center;
+      padding: 12px; border-radius: 10px; background: var(--panel-2); border: 1px solid var(--edge);
+      font-weight: 600; font-size: 14px; transition: background 0.2s, color 0.2s;
+    }
+    .dl-card.best .dl-link { background: var(--blood); border-color: var(--blood); color: #fff; }
+    .dl-link:hover { background: var(--blood); border-color: var(--blood); color: #fff; }
+    .dl-note { margin-top: 22px; font-size: 13.5px; color: var(--ash); display: flex; gap: 10px; align-items: flex-start; }
+    .dl-note svg { color: var(--blood); flex-shrink: 0; margin-top: 2px; }
+
+    /* ── Footer ──────────────────────────────────────────── */
+    .foot { border-top: 1px solid var(--edge); padding: 44px 0 54px; }
+    .foot .wrap { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; align-items: center; }
+    .foot .logo { font-size: 18px; }
+    .foot p { font-size: 13px; color: var(--ash); max-width: 46ch; }
+    .foot a.gh { font-size: 13px; color: var(--ash); letter-spacing: 1px; text-transform: uppercase; }
+    .foot a.gh:hover { color: var(--moon); }
+
+    /* ── Reset card (shown on recovery links) ────────────── */
+    #reset { display: none; min-height: 100vh; align-items: center; justify-content: center; padding: 24px; }
+    #reset .card { width: 100%; max-width: 400px; background: var(--panel); border: 1px solid var(--edge); border-radius: 20px; padding: 36px 30px; box-shadow: 0 30px 80px -20px #000; }
+    #reset .card .logo { text-align: center; font-size: 26px; display: block; }
+    #reset .sub { text-align: center; color: var(--ash); font-size: 14px; margin: 8px 0 26px; }
+    #reset label { display: block; font-size: 13px; color: var(--ash); margin: 14px 0 6px; }
+    #reset input { width: 100%; padding: 13px 14px; border-radius: 12px; border: 1px solid var(--edge); background: var(--void); color: var(--moon); font-size: 15px; outline: none; }
+    #reset input:focus { border-color: var(--blood); }
+    #reset button { width: 100%; margin-top: 24px; padding: 14px; border: none; border-radius: 12px; background: var(--blood); color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; }
+    #reset button:disabled { opacity: 0.5; cursor: default; }
+    #reset .msg { margin-top: 16px; font-size: 14px; text-align: center; min-height: 20px; line-height: 1.4; }
+    #reset .msg.err { color: #ff6b6b; } #reset .msg.ok { color: #4ec07a; }
+
+    /* reveal-on-scroll */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ══ Landing ══════════════════════════════════════════ -->
+  <div id="landing">
+    <nav class="nav">
+      <div class="wrap">
+        <a class="logo" href="#">ZANGE<b>&dagger;</b>SU</a>
+        <div class="nav-links">
+          <a href="#features">Features</a>
+          <a href="#screens">Phone &amp; TV</a>
+          <a href="#download">Download</a>
+          <a class="nav-cta" href="#download">Get the app</a>
+        </div>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <div class="kanji" aria-hidden="true">斬月</div>
+      <div class="wrap hero-grid">
+        <div>
+          <span class="eyebrow"><span class="jp">斬月</span> Free · Android · No ads</span>
+          <h1 class="title">ZANGE<span class="cut">&dagger;</span>SU</h1>
+          <p class="lede">Anime, movies &amp; TV — streamed free on your <b>phone</b> and your <b>TV</b>. Thousands of sources, up to 4K HDR, offline downloads.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" id="heroDownload" href="https://github.com/Spyou/Zangetsu/releases/latest">
+              Download APK <span class="ver" id="heroVer">latest</span>
+            </a>
+            <a class="btn btn-ghost" href="#download">All versions</a>
+          </div>
+          <div class="hero-meta">Android 5.0+ &nbsp;·&nbsp; phone &amp; Android&nbsp;TV &nbsp;·&nbsp; <span>open&nbsp;source</span></div>
+        </div>
+        <div class="moon-stage" aria-hidden="true">
+          <div class="moon"></div>
+          <div class="slash"></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Features -->
+    <section class="section" id="features">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="sec-tag">What it does</span>
+          <h2 class="sec-title">Everything, in one app</h2>
+        </div>
+        <div class="feat-grid reveal">
+          <div class="feat">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="5" rx="1.5"/><rect x="3" y="12" width="18" height="5" rx="1.5"/><circle cx="7" cy="6.5" r="0.6" fill="currentColor"/><circle cx="7" cy="14.5" r="0.6" fill="currentColor"/></svg>
+            <h3>Many sources</h3>
+            <p>Dozens of built-in streaming sources, plus CloudStream extensions you can add.</p>
+          </div>
+          <div class="feat">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg>
+            <h3>Up to 4K · HDR</h3>
+            <p>A real mpv engine drives crisp playback, audio boost and precise seeking.</p>
+          </div>
+          <div class="feat">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v11m0 0l-4-4m4 4l4-4"/><path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+            <h3>Offline downloads</h3>
+            <p>Save episodes and movies to storage and watch them without a connection.</p>
+          </div>
+          <div class="feat">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="20" height="13" rx="2"/><path d="M8 20h8M12 16v4"/></svg>
+            <h3>Phone &amp; TV</h3>
+            <p>One app, two experiences — touch on your phone, a full D-pad UI on your TV.</p>
+          </div>
+          <div class="feat">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg>
+            <h3>Trackers</h3>
+            <p>Auto-scrobble your progress to AniList and MyAnimeList as you watch.</p>
+          </div>
+          <div class="feat">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.2"/><path d="M3 20c0-3 2.5-5 6-5s6 2 6 5M15 20c0-2 .8-3.4 2-4"/></svg>
+            <h3>Watch Party</h3>
+            <p>Sync playback and chat with friends in real time, in the same room.</p>
+          </div>
+          <div class="feat">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 15h6M15 15h2M7 11h2M11 11h6"/></svg>
+            <h3>Auto subtitles</h3>
+            <p>Fetches and styles subtitles automatically — pick fonts, size and colour.</p>
+          </div>
+          <div class="feat">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
+            <h3>No ads, no login</h3>
+            <p>Free forever. Sign in only if you want your list synced across devices.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Phone & TV -->
+    <section class="section" id="screens">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="sec-tag">Two screens</span>
+          <h2 class="sec-title">Made for the big screen too</h2>
+        </div>
+        <div class="split reveal">
+          <div>
+            <div class="k">On your phone</div>
+            <h3>Fast &amp; familiar</h3>
+            <p>A slick, Netflix-style interface with gesture playback, pinch-zoom, and a hero carousel — everything a tap away.</p>
+          </div>
+          <div>
+            <div class="k">On your TV</div>
+            <h3>A real 10-foot UI</h3>
+            <p>Install the same APK on Android TV and Zangetsu adapts its whole interface — a left nav rail, focus highlights and a player you drive entirely with the remote.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Download -->
+    <section class="section" id="download">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="sec-tag" id="dlTag">Latest release</span>
+          <h2 class="sec-title">Download</h2>
+        </div>
+        <div class="dl-grid reveal" id="dlGrid">
+          <div class="dl-card best">
+            <span class="abi">arm64-v8a</span>
+            <h4>Most devices</h4>
+            <p class="desc">Nearly every phone and TV from the last several years. Start here.</p>
+            <span class="size" data-size="arm64">—</span>
+            <a class="dl-link" data-dl="arm64" href="https://github.com/Spyou/Zangetsu/releases/latest">Download</a>
+          </div>
+          <div class="dl-card">
+            <span class="abi">armeabi-v7a</span>
+            <h4>Older 32-bit</h4>
+            <p class="desc">Older phones and budget Android-TV boxes that run a 32-bit system.</p>
+            <span class="size" data-size="v7a">—</span>
+            <a class="dl-link" data-dl="v7a" href="https://github.com/Spyou/Zangetsu/releases/latest">Download</a>
+          </div>
+          <div class="dl-card">
+            <span class="abi">universal</span>
+            <h4>Works everywhere</h4>
+            <p class="desc">One file for any device — larger, but the safe choice if unsure.</p>
+            <span class="size" data-size="universal">—</span>
+            <a class="dl-link" data-dl="universal" href="https://github.com/Spyou/Zangetsu/releases/latest">Download</a>
+          </div>
+        </div>
+        <div class="dl-note reveal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+          <span>Android may warn about installing from outside the Play Store — that's normal for sideloaded apps. Allow it for Zangetsu and the install continues.</span>
+        </div>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <div class="wrap">
+        <div>
+          <a class="logo" href="#">ZANGE<b>&dagger;</b>SU</a>
+          <p>Free and open. Zangetsu isn't affiliated with any streaming service — it plays third-party sources you choose.</p>
+        </div>
+        <a class="gh" href="https://github.com/Spyou/Zangetsu" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ══ Password reset (Appwrite recovery links) ═════════ -->
+  <div id="reset">
+    <div class="card">
+      <a class="logo">ZANGE<b>&dagger;</b>SU</a>
+      <div class="sub">Set a new password</div>
+      <form id="form">
+        <label for="pw">New password</label>
+        <input id="pw" type="password" autocomplete="new-password" placeholder="At least 8 characters" required minlength="8" />
+        <label for="pw2">Confirm password</label>
+        <input id="pw2" type="password" autocomplete="new-password" placeholder="Re-enter password" required minlength="8" />
+        <button id="btn" type="submit">Reset password</button>
+        <div class="msg" id="msg"></div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // ── Appwrite (public config — same values the app ships) ──
+    var ENDPOINT = "https://sgp.cloud.appwrite.io/v1";
+    var PROJECT = "6a1ed44f0029b50bccde";
+    var REPO = "Spyou/Zangetsu";
+
+    // ── Recovery link → show the reset card instead of the landing ──
+    (function () {
+      var p = new URLSearchParams(location.search);
+      var userId = p.get("userId"), secret = p.get("secret");
+      if (!userId || !secret) return;
+      document.getElementById("landing").style.display = "none";
+      document.getElementById("reset").style.display = "flex";
+      var form = document.getElementById("form"), msg = document.getElementById("msg"), btn = document.getElementById("btn");
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var pw = document.getElementById("pw").value, pw2 = document.getElementById("pw2").value;
+        msg.className = "msg";
+        if (pw.length < 8) { msg.className = "msg err"; msg.textContent = "Password must be at least 8 characters."; return; }
+        if (pw !== pw2) { msg.className = "msg err"; msg.textContent = "Passwords do not match."; return; }
+        btn.disabled = true; msg.textContent = "Updating…";
+        fetch(ENDPOINT + "/account/recovery", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json", "X-Appwrite-Project": PROJECT },
+          body: JSON.stringify({ userId: userId, secret: secret, password: pw })
+        }).then(function (r) {
+          if (r.ok) {
+            form.querySelectorAll("input,button").forEach(function (el) { el.disabled = true; });
+            msg.className = "msg ok"; msg.textContent = "✓ Password updated. Open the Zangetsu app and sign in.";
+          } else {
+            return r.json().then(function (err) {
+              msg.className = "msg err"; msg.textContent = (err && err.message) || "Reset failed — the link may have expired.";
+              btn.disabled = false;
+            });
+          }
+        }).catch(function () { msg.className = "msg err"; msg.textContent = "Network error. Please try again."; btn.disabled = false; });
+      });
+    })();
+
+    // ── Latest release → fill version + per-ABI download links + sizes ──
+    (function () {
+      var fmt = function (b) { return (b / 1048576).toFixed(1) + " MB"; };
+      var pick = function (assets, needle) {
+        return assets.find(function (a) { return /\.apk$/i.test(a.name) && a.name.toLowerCase().indexOf(needle) > -1; });
+      };
+      fetch("https://api.github.com/repos/" + REPO + "/releases/latest")
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(function (rel) {
+          var v = rel.tag_name || "latest";
+          document.getElementById("heroVer").textContent = v;
+          document.getElementById("dlTag").textContent = "Latest · " + v;
+          var a = rel.assets || [];
+          var map = { arm64: pick(a, "arm64") , v7a: pick(a, "v7a") || pick(a, "armeabi"), universal: pick(a, "universal") };
+          var arm64 = map.arm64 || map.universal;
+          if (arm64) document.getElementById("heroDownload").href = arm64.browser_download_url;
+          Object.keys(map).forEach(function (k) {
+            var asset = map[k];
+            var link = document.querySelector('[data-dl="' + k + '"]');
+            var size = document.querySelector('[data-size="' + k + '"]');
+            if (asset && link) link.href = asset.browser_download_url;
+            if (asset && size) size.textContent = fmt(asset.size);
+          });
+        })
+        .catch(function () { /* keep the /releases/latest fallback links */ });
+    })();
+
+    // ── Reveal on scroll ──
+    (function () {
+      if (!("IntersectionObserver" in window)) return;
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+      }, { threshold: 0.12 });
+      document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
+    })();
+  </script>
+</body>
+</html>
