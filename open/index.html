@@ -55,8 +55,10 @@
 
   <script>
     var params = new URLSearchParams(location.search);
-    var d = params.get("d");
+    var s = params.get("s");
+    var u = params.get("u");
     var t = params.get("t") || "this title";
+    var y = params.get("y");
     document.getElementById("title").textContent = t;
 
     var opened = false;
@@ -65,8 +67,11 @@
     window.addEventListener("pagehide", function () { opened = true; });
 
     function tryApp() {
-      if (!d) return;
-      location.href = "zangetsu://open?d=" + encodeURIComponent(d) + "&t=" + encodeURIComponent(t);
+      if (!s || !u) return;
+      var link = "zangetsu://open?s=" + encodeURIComponent(s) +
+        "&u=" + encodeURIComponent(u) + "&t=" + encodeURIComponent(t);
+      if (y) link += "&y=" + encodeURIComponent(y);
+      location.href = link;
     }
 
     function showFallback(msg) {
@@ -75,7 +80,7 @@
       document.getElementById("btns").style.display = "flex";
     }
 
-    if (d) {
+    if (s && u) {
       tryApp();
       // App didn't take over within ~1.5s → it's probably not installed.
       setTimeout(function () {
