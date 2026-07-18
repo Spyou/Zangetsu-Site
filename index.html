@@ -408,6 +408,11 @@
             msg.className = "msg err"; msg.textContent = res.error.message || "Reset failed — the link may have expired. Request a new one.";
             btn.disabled = false;
           } else {
+            // A deliberate reset must WIN over the migration's old-password
+            // "heal" (which would otherwise re-sync the old Appwrite password on
+            // the next old-password login). Clearing the capture flag stops that.
+            var uid = res.data && res.data.user && res.data.user.id;
+            if (uid) { try { sb.from("profiles").update({ needs_password_capture: false }).eq("id", uid).then(function () {}, function () {}); } catch (e) {} }
             form.querySelectorAll("input,button").forEach(function (el) { el.disabled = true; });
             msg.className = "msg ok"; msg.textContent = "✓ Password updated. Open the Zangetsu app and sign in.";
           }
