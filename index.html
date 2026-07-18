@@ -340,7 +340,7 @@
     </footer>
   </div>
 
-  <!-- ══ Password reset (Appwrite recovery links) ═════════ -->
+  <!-- ══ Password reset (Supabase recovery links) ═════════ -->
   <div id="reset">
     <div class="card">
       <a class="logo">ZANGE<b>&dagger;</b>SU</a>
@@ -356,19 +356,23 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // ── Appwrite (public config — same values the app ships) ──
-    var ENDPOINT = "https://sgp.cloud.appwrite.io/v1";
-    var PROJECT = "6a1ed44f0029b50bccde";
+    // ── Supabase (public config — same values the app ships) ──
+    var SUPABASE_URL = "https://eogwzrlfoercfwcfwlmv.supabase.co";
+    var SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVvZ3d6cmxmb2VyY2Z3Y2Z3bG12Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjgzODIsImV4cCI6MjA5OTk0NDM4Mn0.qr-nHnB9vb7BodP55XJ9-6Rwp__eOGCS6txhLiuWVZw";
     var REPO = "Spyou/Zangetsu";
 
     // ── Recovery link → show the reset card instead of the landing ──
+    // Supabase recovery links land here with `type=recovery` in the URL hash;
+    // supabase-js consumes it (detectSessionInUrl) and sets a recovery session,
+    // after which auth.updateUser({password}) sets the new password.
     (function () {
-      var p = new URLSearchParams(location.search);
-      var userId = p.get("userId"), secret = p.get("secret");
-      if (!userId || !secret) return;
+      var isRecovery = /type=recovery/.test(location.hash) || /type=recovery/.test(location.search);
+      if (!isRecovery) return;
       document.getElementById("landing").style.display = "none";
       document.getElementById("reset").style.display = "flex";
+      var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON, { auth: { detectSessionInUrl: true, flowType: "implicit" } });
       var form = document.getElementById("form"), msg = document.getElementById("msg"), btn = document.getElementById("btn");
       form.addEventListener("submit", function (e) {
         e.preventDefault();
@@ -377,19 +381,13 @@
         if (pw.length < 8) { msg.className = "msg err"; msg.textContent = "Password must be at least 8 characters."; return; }
         if (pw !== pw2) { msg.className = "msg err"; msg.textContent = "Passwords do not match."; return; }
         btn.disabled = true; msg.textContent = "Updating…";
-        fetch(ENDPOINT + "/account/recovery", {
-          method: "PUT",
-          headers: { "Content-Type": "application/json", "X-Appwrite-Project": PROJECT },
-          body: JSON.stringify({ userId: userId, secret: secret, password: pw })
-        }).then(function (r) {
-          if (r.ok) {
+        sb.auth.updateUser({ password: pw }).then(function (res) {
+          if (res.error) {
+            msg.className = "msg err"; msg.textContent = res.error.message || "Reset failed — the link may have expired.";
+            btn.disabled = false;
+          } else {
             form.querySelectorAll("input,button").forEach(function (el) { el.disabled = true; });
             msg.className = "msg ok"; msg.textContent = "✓ Password updated. Open the Zangetsu app and sign in.";
-          } else {
-            return r.json().then(function (err) {
-              msg.className = "msg err"; msg.textContent = (err && err.message) || "Reset failed — the link may have expired.";
-              btn.disabled = false;
-            });
           }
         }).catch(function () { msg.className = "msg err"; msg.textContent = "Network error. Please try again."; btn.disabled = false; });
       });
