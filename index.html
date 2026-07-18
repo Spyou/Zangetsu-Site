@@ -364,16 +364,38 @@
     var REPO = "Spyou/Zangetsu";
 
     // ── Recovery link → show the reset card instead of the landing ──
-    // Supabase recovery links land here with `type=recovery` in the URL hash;
-    // supabase-js consumes it (detectSessionInUrl) and sets a recovery session,
-    // after which auth.updateUser({password}) sets the new password.
+    // Handles BOTH Supabase flows: the token_hash query (?token_hash=…&type=recovery,
+    // scanner-safe) and the implicit hash (#access_token=…&type=recovery), plus
+    // surfaces an expired/invalid link instead of silently showing the landing.
     (function () {
-      var isRecovery = /type=recovery/.test(location.hash) || /type=recovery/.test(location.search);
-      if (!isRecovery) return;
+      var qp = new URLSearchParams(location.search);
+      var hp = new URLSearchParams((location.hash || "").replace(/^#/, ""));
+      var tokenHash = qp.get("token_hash");
+      var errDesc = hp.get("error_description") || qp.get("error_description") || hp.get("error") || qp.get("error");
+      var looksRecovery = !!hp.get("access_token") || hp.get("type") === "recovery" ||
+                          (tokenHash && qp.get("type") === "recovery") || !!errDesc;
+      if (!looksRecovery) return;
+
       document.getElementById("landing").style.display = "none";
       document.getElementById("reset").style.display = "flex";
-      var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON, { auth: { detectSessionInUrl: true, flowType: "implicit" } });
       var form = document.getElementById("form"), msg = document.getElementById("msg"), btn = document.getElementById("btn");
+
+      if (errDesc) {
+        msg.className = "msg err";
+        msg.textContent = decodeURIComponent(String(errDesc).replace(/\+/g, " ")) + " — request a new reset email from the app.";
+        btn.disabled = true;
+        return;
+      }
+
+      var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON, { auth: { detectSessionInUrl: true, flowType: "implicit" } });
+      // token_hash flow: verify it to establish the recovery session (JS-only, so
+      // an email link-scanner GET can't consume the single-use token).
+      if (tokenHash) {
+        sb.auth.verifyOtp({ token_hash: tokenHash, type: "recovery" }).then(function (r) {
+          if (r.error) { msg.className = "msg err"; msg.textContent = "This link has expired. Request a new reset email from the app."; btn.disabled = true; }
+        });
+      }
+
       form.addEventListener("submit", function (e) {
         e.preventDefault();
         var pw = document.getElementById("pw").value, pw2 = document.getElementById("pw2").value;
@@ -383,7 +405,7 @@
         btn.disabled = true; msg.textContent = "Updating…";
         sb.auth.updateUser({ password: pw }).then(function (res) {
           if (res.error) {
-            msg.className = "msg err"; msg.textContent = res.error.message || "Reset failed — the link may have expired.";
+            msg.className = "msg err"; msg.textContent = res.error.message || "Reset failed — the link may have expired. Request a new one.";
             btn.disabled = false;
           } else {
             form.querySelectorAll("input,button").forEach(function (el) { el.disabled = true; });
