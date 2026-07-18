@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Reset your Zangetsu password</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin:0; min-height:100vh; display:grid; place-items:center;
+    background:#0b0b0f; color:#f2f2f4; font:16px/1.5 -apple-system,Segoe UI,Roboto,sans-serif; }
+  .card { width:min(92vw,380px); background:#15151b; border:1px solid #26262e;
+    border-radius:16px; padding:28px 24px; }
+  h1 { font-size:20px; margin:0 0 4px; }
+  p  { color:#a0a0aa; margin:0 0 18px; font-size:14px; }
+  label { font-size:13px; color:#c9c9d2; }
+  input { width:100%; box-sizing:border-box; margin:6px 0 14px; padding:12px 14px;
+    background:#0f0f14; border:1px solid #2c2c35; border-radius:10px; color:#fff; font-size:15px; }
+  button { width:100%; padding:13px; border:0; border-radius:10px; background:#ff4d57;
+    color:#fff; font-size:15px; font-weight:600; cursor:pointer; }
+  button:disabled { opacity:.5; cursor:default; }
+  .msg { margin-top:14px; font-size:14px; min-height:20px; }
+  .ok { color:#32d583; } .err { color:#ff6b6b; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Reset your password</h1>
+    <p>Enter a new password for your Zangetsu account.</p>
+    <form id="f">
+      <label for="pw">New password</label>
+      <input id="pw" type="password" minlength="6" autocomplete="new-password" required />
+      <label for="pw2">Confirm password</label>
+      <input id="pw2" type="password" minlength="6" autocomplete="new-password" required />
+      <button id="btn" type="submit">Set new password</button>
+    </form>
+    <div id="msg" class="msg"></div>
+  </div>
+
+  <!-- Supabase JS v2 (self-contained; no build step) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Public project id + anon key — safe to embed (RLS protects data).
+    const SUPABASE_URL = "https://eogwzrlfoercfwcfwlmv.supabase.co";
+    const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVvZ3d6cmxmb2VyY2Z3Y2Z3bG12Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjgzODIsImV4cCI6MjA5OTk0NDM4Mn0.qr-nHnB9vb7BodP55XJ9-6Rwp__eOGCS6txhLiuWVZw";
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {
+      auth: { detectSessionInUrl: true, flowType: "implicit" },
+    });
+
+    const msg = document.getElementById("msg");
+    const btn = document.getElementById("btn");
+    const setMsg = (t, ok) => { msg.textContent = t; msg.className = "msg " + (ok ? "ok" : "err"); };
+
+    // The recovery link puts a session token in the URL; supabase-js consumes it.
+    sb.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY") setMsg("Verified — choose a new password.", true);
+    });
+
+    document.getElementById("f").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const pw = document.getElementById("pw").value;
+      const pw2 = document.getElementById("pw2").value;
+      if (pw !== pw2) return setMsg("Passwords don't match.", false);
+      btn.disabled = true; setMsg("Saving…", true);
+      const { error } = await sb.auth.updateUser({ password: pw });
+      if (error) { btn.disabled = false; return setMsg(error.message || "Could not reset. The link may have expired — request a new one.", false); }
+      setMsg("Password updated. You can now sign in in the app.", true);
+      btn.textContent = "Done";
+    });
+
+    // If the page was opened without a recovery token, tell the user.
+    setTimeout(async () => {
+      const { data } = await sb.auth.getSession();
+      if (!data.session) setMsg("Open this page from the reset link in your email.", false);
+    }, 800);
+  </script>
+</body>
+</html>
