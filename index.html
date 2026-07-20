@@ -5,8 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Zangetsu — Free anime, movies & TV for Android</title>
   <meta name="description" content="Zangetsu is a free Android app for streaming anime, movies and TV — on your phone and your TV. Up to 4K HDR, offline downloads, no ads." />
-  <meta property="og:title" content="Zangetsu" />
-  <meta property="og:description" content="Anime, movies & TV — streamed free on your phone and your TV." />
+  <link rel="canonical" href="https://zangetsu.online/" />
+  <meta name="theme-color" content="#08070b" />
+
+  <!-- Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <!-- Open Graph / social share -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Zangetsu" />
+  <meta property="og:url" content="https://zangetsu.online/" />
+  <meta property="og:title" content="Zangetsu — Free anime, movies &amp; TV for Android" />
+  <meta property="og:description" content="Anime, movies &amp; TV — streamed free on your phone and your TV. Up to 4K HDR, offline downloads, no ads." />
+  <meta property="og:image" content="https://zangetsu.online/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Zangetsu — free anime, movies and TV on Android phone and TV" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Zangetsu — Free anime, movies &amp; TV for Android" />
+  <meta name="twitter:description" content="Anime, movies &amp; TV — streamed free on your phone and your TV." />
+  <meta name="twitter:image" content="https://zangetsu.online/og.png" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Inter:wght@400;500;600&family=Shippori+Mincho:wght@700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
@@ -180,13 +201,27 @@
       .reveal { opacity: 1; transform: none; transition: none; }
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Zangetsu",
+    "operatingSystem": "Android 5.0+",
+    "applicationCategory": "MultimediaApplication",
+    "description": "Free Android app for streaming anime, movies and TV on your phone and TV — up to 4K HDR, offline downloads, no ads.",
+    "url": "https://zangetsu.online/",
+    "downloadUrl": "https://github.com/Spyou/Zangetsu/releases/latest",
+    "image": "https://zangetsu.online/og.png",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
 </head>
 <body>
   <!-- ══ Landing ══════════════════════════════════════════ -->
   <div id="landing">
     <nav class="nav">
       <div class="wrap">
-        <a class="logo" href="#">ZANGE<b>&dagger;</b>SU</a>
+        <a class="logo" href="/">ZANGE<b>&dagger;</b>SU</a>
         <div class="nav-links">
           <a href="#features">Features</a>
           <a href="#screens">Phone &amp; TV</a>
@@ -202,7 +237,7 @@
         <div>
           <span class="eyebrow"><span class="jp">斬月</span> Free · Android · No ads</span>
           <h1 class="title">ZANGE<span class="cut">&dagger;</span>SU</h1>
-          <p class="lede">Anime, movies &amp; TV — streamed free on your <b>phone</b> and your <b>TV</b>. Thousands of sources, up to 4K HDR, offline downloads.</p>
+          <p class="lede">Anime, movies &amp; TV — streamed free on your <b>phone</b> and your <b>TV</b>. Hundreds of sources, up to 4K HDR, offline downloads.</p>
           <div class="cta-row">
             <a class="btn btn-primary" id="heroDownload" href="https://github.com/Spyou/Zangetsu/releases/latest">
               Download APK <span class="ver" id="heroVer">latest</span>
@@ -332,7 +367,7 @@
     <footer class="foot">
       <div class="wrap">
         <div>
-          <a class="logo" href="#">ZANGE<b>&dagger;</b>SU</a>
+          <a class="logo" href="/">ZANGE<b>&dagger;</b>SU</a>
           <p>Free and open. Zangetsu isn't affiliated with any streaming service — it plays third-party sources you choose.</p>
         </div>
         <a class="gh" href="https://github.com/Spyou/Zangetsu" target="_blank" rel="noopener">GitHub ↗</a>
@@ -356,12 +391,21 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // ── Supabase (public config — same values the app ships) ──
+    // ── Supabase (public config — same values the app ships). The SDK is
+    //    loaded lazily, only on a password-recovery link, so the ~99% of
+    //    visitors who just want the landing page never download it. ──
     var SUPABASE_URL = "https://eogwzrlfoercfwcfwlmv.supabase.co";
     var SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVvZ3d6cmxmb2VyY2Z3Y2Z3bG12Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjgzODIsImV4cCI6MjA5OTk0NDM4Mn0.qr-nHnB9vb7BodP55XJ9-6Rwp__eOGCS6txhLiuWVZw";
     var REPO = "Spyou/Zangetsu";
+    function loadSupabase(cb) {
+      if (window.supabase) return cb();
+      var s = document.createElement("script");
+      s.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+      s.onload = function () { cb(); };
+      s.onerror = function () { cb(new Error("network")); };
+      document.head.appendChild(s);
+    }
 
     // ── Recovery link → show the reset card instead of the landing ──
     // Handles BOTH Supabase flows: the token_hash query (?token_hash=…&type=recovery,
@@ -387,14 +431,22 @@
         return;
       }
 
-      var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON, { auth: { detectSessionInUrl: true, flowType: "implicit" } });
-      // token_hash flow: verify it to establish the recovery session (JS-only, so
-      // an email link-scanner GET can't consume the single-use token).
-      if (tokenHash) {
-        sb.auth.verifyOtp({ token_hash: tokenHash, type: "recovery" }).then(function (r) {
-          if (r.error) { msg.className = "msg err"; msg.textContent = "This link has expired. Request a new reset email from the app."; btn.disabled = true; }
-        });
-      }
+      // Real recovery link → load the SDK now. Keep submit disabled until the
+      // client exists so the form can never fire before Supabase is ready.
+      var sb = null;
+      btn.disabled = true;
+      loadSupabase(function (err) {
+        if (err) { msg.className = "msg err"; msg.textContent = "Couldn't load the reset library — check your connection and reload the page."; return; }
+        btn.disabled = false;
+        sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON, { auth: { detectSessionInUrl: true, flowType: "implicit" } });
+        // token_hash flow: verify it to establish the recovery session (JS-only, so
+        // an email link-scanner GET can't consume the single-use token).
+        if (tokenHash) {
+          sb.auth.verifyOtp({ token_hash: tokenHash, type: "recovery" }).then(function (r) {
+            if (r.error) { msg.className = "msg err"; msg.textContent = "This link has expired. Request a new reset email from the app."; btn.disabled = true; }
+          });
+        }
+      });
 
       form.addEventListener("submit", function (e) {
         e.preventDefault();
@@ -402,6 +454,7 @@
         msg.className = "msg";
         if (pw.length < 8) { msg.className = "msg err"; msg.textContent = "Password must be at least 8 characters."; return; }
         if (pw !== pw2) { msg.className = "msg err"; msg.textContent = "Passwords do not match."; return; }
+        if (!sb) { msg.className = "msg err"; msg.textContent = "Still loading — try again in a second."; return; }
         btn.disabled = true; msg.textContent = "Updating…";
         sb.auth.updateUser({ password: pw }).then(function (res) {
           if (res.error) {
