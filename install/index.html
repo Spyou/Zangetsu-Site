@@ -1,440 +1,304 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Install Zangetsu — Step-by-step guide</title>
-<meta name="description" content="Step-by-step guide to install Zangetsu on Android and set up sources for anime, movies and TV." />
-<link rel="canonical" href="https://zangetsu.online/install/" />
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
-<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-<meta name="theme-color" content="#0a0a0e" />
-<meta property="og:title" content="Install Zangetsu" />
-<meta property="og:description" content="Install Zangetsu on Android in two steps, then set up sources." />
-<meta property="og:image" content="https://zangetsu.online/og.png" />
-<meta property="og:url" content="https://zangetsu.online/install/" />
-<meta property="og:type" content="website" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#0a0a0e; --bg2:#0f0e13; --surface:#15151b; --surface2:#1d1e26;
-    --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.13);
-    --txt:#f3f3f5; --txt2:#a2a2ad; --txt3:#6b6b76;
-    --accent:#ff4d57; --accent-soft:rgba(255,77,87,.12); --accent-line:rgba(255,77,87,.28);
-    --ok:#3dd68c;
-    --maxw:1060px;
-    --disp:"Sora",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif;
-  }
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{margin:0;background:var(--bg);color:var(--txt);font-family:var(--body);line-height:1.55;
-    -webkit-font-smoothing:antialiased;overflow-x:hidden}
-  a{color:inherit}
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
-  svg.ic{width:1em;height:1em;stroke:currentColor;stroke-width:1.7;fill:none;
-    stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
-  svg.ic.fill{fill:currentColor;stroke:none}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Install Zangetsu — Setup guide</title>
+  <meta name="description" content="How to install Zangetsu on Android and set up sources for anime, movies and TV — in two steps." />
+  <link rel="canonical" href="https://zangetsu.online/install/" />
+  <meta name="theme-color" content="#08070b" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Zangetsu" />
+  <meta property="og:url" content="https://zangetsu.online/install/" />
+  <meta property="og:title" content="Install Zangetsu — Setup guide" />
+  <meta property="og:description" content="Install Zangetsu on Android in two steps, then set up sources." />
+  <meta property="og:image" content="https://zangetsu.online/og.png" />
 
-  header{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
-    background:rgba(10,10,14,.72);border-bottom:1px solid var(--line)}
-  .bar{display:flex;align-items:center;justify-content:space-between;height:58px}
-  .brand{font-family:var(--disp);font-weight:800;letter-spacing:-.02em;font-size:19px;display:flex;align-items:center;gap:9px}
-  .brand .blade{color:var(--accent);font-size:21px}
-  .steps-dots{display:flex;gap:7px;align-items:center}
-  .steps-dots a{width:22px;height:4px;border-radius:99px;background:var(--surface2);transition:.25s}
-  .steps-dots a.on{background:var(--accent)}
-  .gh{font-size:13px;color:var(--txt2);text-decoration:none;padding:8px 14px;border:1px solid var(--line);border-radius:8px;display:inline-flex;gap:7px;align-items:center}
-  .gh:hover{border-color:var(--line2);color:var(--txt)}
-  @media(max-width:640px){.gh{display:none}}
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Inter:wght@400;500;600&family=Shippori+Mincho:wght@700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --void: #08070b; --panel: #100e15; --panel-2: #15121d; --edge: #241f2e;
+      --blood: #ff2d4f; --blood-2: #a80d24; --moon: #f3f1f7; --ash: #857f92;
+      --glow: rgba(255, 45, 79, 0.42);
+      --display: "Archivo", sans-serif; --body: "Inter", sans-serif;
+      --mono: "Space Mono", monospace; --jp: "Shippori Mincho", serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--void); color: var(--moon); font-family: var(--body); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--blood); color: #fff; }
+    :focus-visible { outline: 2px solid var(--blood); outline-offset: 3px; }
+    .wrap { width: min(1140px, 90vw); margin: 0 auto; }
+    .mono { font-family: var(--mono); }
 
-  .hero{padding:66px 0 30px}
-  .hero-inner{max-width:640px}
-  .eyebrow{font-family:var(--disp);font-weight:600;font-size:12px;letter-spacing:.26em;
-    text-transform:uppercase;color:var(--accent);margin-bottom:20px;display:flex;align-items:center;gap:10px}
-  .eyebrow::before{content:"";width:26px;height:1px;background:var(--accent)}
-  h1{font-family:var(--disp);font-weight:800;letter-spacing:-.03em;line-height:1.03;
-    font-size:clamp(30px,7vw,58px);margin:0 0 18px}
-  h1 .hl{color:var(--accent)}
-  .sub{color:var(--txt2);font-size:clamp(15px,2.2vw,18px);max-width:540px;margin:0 0 28px}
-  .cta-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-  .btn{font-family:var(--disp);font-weight:600;font-size:15px;border-radius:9px;
-    padding:13px 24px;border:0;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:9px;transition:.18s}
-  .btn-primary{background:var(--accent);color:#fff}
-  .btn-primary:hover{background:#ff5e67}
-  .btn-ghost{background:transparent;color:var(--txt);border:1px solid var(--line2)}
-  .btn-ghost:hover{border-color:var(--txt3)}
-  .chip{display:inline-flex;gap:8px;align-items:center;font-size:13px;color:var(--txt2);margin-top:24px}
-  .chip .dot{width:6px;height:6px;border-radius:99px;background:var(--ok)}
+    /* Nav */
+    .nav { position: sticky; top: 0; z-index: 30; backdrop-filter: blur(14px); background: rgba(8, 7, 11, 0.72); border-bottom: 1px solid var(--edge); }
+    .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { font-family: var(--display); font-weight: 900; font-size: 22px; letter-spacing: 3px; }
+    .logo b { color: var(--blood); font-weight: 900; }
+    .nav-links { display: flex; gap: 30px; align-items: center; }
+    .nav-links a { font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ash); transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.on { color: var(--moon); }
+    .nav-cta { font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 1px; color: var(--blood); border: 1px solid var(--blood); padding: 8px 16px; border-radius: 8px; transition: background 0.2s, color 0.2s; }
+    .nav-cta:hover { background: var(--blood); color: #fff; }
+    @media (max-width: 760px) { .nav-links a:not(.nav-cta) { display: none; } }
 
-  /* section heads */
-  .sec-head{padding:56px 0 6px;border-top:1px solid var(--line);margin-top:22px}
-  .sec-head.first{border-top:0;margin-top:0}
-  .kicker{font-family:var(--disp);font-weight:600;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--txt3);margin-bottom:12px}
-  .h2{font-family:var(--disp);font-weight:800;letter-spacing:-.02em;font-size:clamp(24px,4.5vw,34px);margin:0 0 10px}
-  .h2 .hl{color:var(--accent)}
-  .h2-sub{color:var(--txt2);margin:0;max-width:620px;font-size:15.5px}
+    /* Hero */
+    .hero { position: relative; padding: clamp(64px, 11vw, 116px) 0 clamp(28px, 5vw, 52px); overflow: hidden; }
+    .kanji { position: absolute; right: -2vw; top: 50%; transform: translateY(-50%); font-family: var(--jp); font-size: clamp(180px, 40vw, 520px); line-height: 0.82; writing-mode: vertical-rl; color: #fff; opacity: 0.03; user-select: none; pointer-events: none; letter-spacing: -0.05em; }
+    .eyebrow { font-family: var(--mono); font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: var(--blood); display: inline-flex; align-items: center; gap: 10px; margin-bottom: 22px; }
+    .eyebrow .jp { font-family: var(--jp); font-size: 17px; letter-spacing: 0; }
+    h1.title { font-family: var(--display); font-weight: 900; font-size: clamp(46px, 9vw, 104px); line-height: 0.88; letter-spacing: -0.02em; }
+    h1.title .cut { color: var(--blood); }
+    .lede { font-size: clamp(16px, 2.1vw, 20px); color: var(--ash); max-width: 46ch; margin: 20px 0 32px; }
+    .lede b { color: var(--moon); font-weight: 600; }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+    .btn { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 16px; padding: 15px 26px; border-radius: 12px; border: 1px solid transparent; cursor: pointer; transition: transform 0.15s, box-shadow 0.25s, background 0.2s; background: none; color: inherit; }
+    .btn svg { width: 18px; height: 18px; }
+    .btn-primary { background: var(--blood); color: #fff; box-shadow: 0 10px 34px -8px var(--glow); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 44px -6px var(--glow); }
+    .btn-primary .ver { font-family: var(--mono); font-size: 12px; opacity: 0.85; padding-left: 10px; border-left: 1px solid rgba(255, 255, 255, 0.35); }
+    .btn-ghost { border-color: var(--edge); color: var(--ash); }
+    .btn-ghost:hover { border-color: var(--moon); color: var(--moon); }
 
-  /* steps */
-  .steps{padding:6px 0 0;display:flex;flex-direction:column}
-  .step{display:grid;grid-template-columns:1fr 300px;gap:60px;align-items:center;
-    padding:60px 6px;border-top:1px solid var(--line)}
-  .step:first-child{border-top:none;padding-top:34px}
-  .step:nth-child(even){grid-template-columns:300px 1fr}
-  .step:nth-child(even) .s-body{order:2}
-  .step:nth-child(even) .s-visual{order:1}
-  .s-num{display:inline-flex;align-items:center;gap:11px;margin-bottom:15px}
-  .s-num .n{font-family:var(--disp);font-weight:700;font-size:13px;color:var(--accent);
-    display:grid;place-items:center;width:30px;height:30px;border-radius:8px;border:1px solid var(--accent-line);background:var(--accent-soft)}
-  .s-num .lbl{font-family:var(--disp);font-weight:600;font-size:12px;letter-spacing:.14em;color:var(--txt3);text-transform:uppercase}
-  .s-title{font-family:var(--disp);font-weight:700;letter-spacing:-.02em;font-size:clamp(22px,3.8vw,29px);margin:0 0 13px}
-  .s-desc{color:var(--txt2);font-size:16px;line-height:1.6;margin:0 0 18px}
-  .s-desc b{color:var(--txt);font-weight:600}
-  .s-desc .k{font-family:var(--disp);font-weight:600;color:var(--txt);background:var(--surface2);
-    border:1px solid var(--line);border-radius:6px;padding:1px 7px;font-size:13px;white-space:nowrap}
-  .callout{display:flex;gap:11px;background:var(--surface2);border:1px solid var(--line);
-    border-radius:12px;padding:13px 15px;font-size:13.5px;color:var(--txt2);align-items:flex-start}
-  .callout .ic{color:var(--ok);margin-top:2px;font-size:16px}
-  .callout.warn .ic{color:var(--accent)}
-  .callout b{color:var(--txt);font-weight:600}
+    /* Section shell */
+    .section { padding: clamp(52px, 8vw, 96px) 0; position: relative; }
+    .sec-head { display: flex; align-items: baseline; gap: 18px; margin-bottom: 20px; flex-wrap: wrap; }
+    .sec-tag { font-family: var(--mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--blood); }
+    .sec-title { font-family: var(--display); font-weight: 800; font-size: clamp(30px, 5vw, 52px); letter-spacing: -0.02em; line-height: 1; }
+    .sec-lede { color: var(--ash); max-width: 62ch; font-size: 15.5px; margin-bottom: 34px; }
+    .sec-lede b { color: var(--moon); font-weight: 600; }
+    .section p b { color: var(--moon); font-weight: 600; }
 
-  /* phone */
-  .s-visual{display:flex;justify-content:center}
-  .phone{width:290px;background:#000;border-radius:36px;padding:9px;border:1px solid #26262d;
-    box-shadow:0 30px 60px -24px rgba(0,0,0,.8)}
-  .notch{height:20px;display:flex;justify-content:center;align-items:center}
-  .notch::after{content:"";width:66px;height:5px;border-radius:99px;background:#222229}
-  .screen{background:var(--bg2);border-radius:26px;overflow:hidden;aspect-ratio:9/13.6;display:flex;flex-direction:column}
-  .sbar{display:flex;justify-content:space-between;padding:9px 15px 5px;font-size:9.5px;color:var(--txt3)}
-  .scr-body{flex:1;padding:12px 14px;display:flex;flex-direction:column;gap:9px}
-  .scr-title{font-family:var(--disp);font-weight:700;font-size:12.5px}
-  .row-item{display:flex;align-items:center;justify-content:space-between;gap:10px;
-    background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:10px 11px}
-  .row-item .ri-l{display:flex;align-items:center;gap:10px;font-size:11.5px}
-  .ri-ic{width:28px;height:28px;border-radius:8px;background:var(--surface2);display:grid;place-items:center;color:var(--txt2);font-size:14px;flex:0 0 auto}
-  .toggle{width:38px;height:22px;border-radius:99px;background:var(--accent);position:relative;flex:0 0 auto}
-  .toggle::after{content:"";position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:99px;background:#fff}
-  .toggle.off{background:var(--surface2)}.toggle.off::after{left:2px;right:auto}
-  .dialog{margin-top:auto;background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:14px}
-  .dialog h4{font-family:var(--disp);margin:0 0 6px;font-size:12.5px;text-align:center}
-  .dialog p{margin:0 0 12px;font-size:10.5px;color:var(--txt2);line-height:1.45;text-align:center}
-  .dialog .acts{display:flex;justify-content:flex-end;gap:16px;font-size:11.5px;font-weight:600;font-family:var(--disp)}
-  .dialog .acts .a1{color:var(--txt3)}.dialog .acts .a2{color:var(--accent)}
-  .emblem{width:44px;height:44px;border-radius:12px;background:var(--accent-soft);border:1px solid var(--accent-line);
-    display:grid;place-items:center;color:var(--accent);font-size:20px;margin:0 auto 10px}
-  .emblem .ic{font-size:22px}
-  .bigbtn{background:var(--accent);color:#fff;text-align:center;border-radius:11px;padding:11px;font-family:var(--disp);font-weight:600;font-size:12.5px;display:flex;align-items:center;justify-content:center;gap:7px}
-  .instrow{display:flex;align-items:center;gap:9px;font-size:10px;color:var(--txt2)}
-  .instrow .pb{flex:1;height:5px;background:var(--surface2);border-radius:99px;overflow:hidden}
-  .instrow .pb i{display:block;height:100%;width:60%;background:var(--accent)}
-  .poster-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:2px}
-  .poster{aspect-ratio:2/3;border-radius:7px;background:var(--surface2);position:relative;overflow:hidden}
-  .poster::after{content:"";position:absolute;left:6px;right:6px;bottom:6px;height:3px;border-radius:99px;background:var(--accent);opacity:.75}
-  .applogo{width:34px;height:34px;border-radius:9px;background:var(--accent-soft);border:1px solid var(--accent-line);display:grid;place-items:center;color:var(--accent);font-family:var(--disp);font-weight:800;font-size:17px;flex:0 0 auto}
-  .applead{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--txt3)}
-  .feat{display:flex;align-items:center;gap:9px;font-size:11px;color:var(--txt)}
-  .fchk{width:16px;height:16px;border-radius:5px;background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent);display:grid;place-items:center;flex:0 0 auto}
-  .fchk .ic{width:9px;height:9px;stroke-width:2.6}
-  .row-item .chev{color:var(--txt3);width:13px;height:13px}
+    /* Two-panel split (steps, platforms) */
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--edge); border: 1px solid var(--edge); border-radius: 16px; overflow: hidden; }
+    @media (max-width: 720px) { .split { grid-template-columns: 1fr; } }
+    .split > div { background: var(--panel); padding: clamp(28px, 4.5vw, 46px); display: flex; flex-direction: column; }
+    .split .k { font-family: var(--mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--blood); }
+    .split h3 { font-family: var(--display); font-weight: 800; font-size: clamp(22px, 3.2vw, 30px); margin: 12px 0 12px; letter-spacing: -0.01em; }
+    .split p { color: var(--ash); font-size: 15px; }
+    .split .btn { align-self: flex-start; margin-top: auto; padding-top: 13px; }
+    .split .after { margin-top: 20px; }
 
-  /* ecosystems */
-  .eco-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:22px 0 6px}
-  .eco{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:13px}
-  .eco-h{display:flex;align-items:center;gap:12px}
-  .eco-ic{width:40px;height:40px;border-radius:11px;background:var(--surface2);border:1px solid var(--line);display:grid;place-items:center;color:var(--accent);font-size:18px;flex:0 0 auto}
-  .eco-name{font-family:var(--disp);font-weight:700;font-size:16px}
-  .eco-for{font-size:11.5px;color:var(--txt3);margin-top:1px}
-  .eco-path{font-size:12.5px;color:var(--txt2);line-height:1.55}
-  .eco-path .k{font-family:var(--disp);font-weight:600;color:var(--txt);font-size:11.5px}
-  .eco-path code{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--txt2)}
-  .eco-label{font-family:var(--disp);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--txt3);margin-top:2px}
-  .copy{display:flex;gap:8px;align-items:center;background:var(--bg2);border:1px solid var(--line);
-    border-radius:10px;padding:5px 5px 5px 12px}
-  .copy .cw{flex:1;min-width:0}
-  .copy .cn{font-family:var(--disp);font-weight:600;font-size:12px;color:var(--txt)}
-  .copy code{font-family:ui-monospace,Menlo,monospace;font-size:10px;color:var(--txt3);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .copy button{font-family:var(--disp);font-weight:600;font-size:11.5px;background:var(--surface2);color:var(--txt);border:1px solid var(--line2);border-radius:8px;padding:7px 12px;cursor:pointer;transition:.18s;flex:0 0 auto}
-  .copy button:hover{border-color:var(--accent);color:var(--accent)}
-  .copy button.done{border-color:var(--ok);color:var(--ok)}
-  .eco-note{font-size:11.5px;color:var(--txt3);margin-top:auto;padding-top:4px;border-top:1px solid var(--line)}
+    /* Card grid (sources) */
+    .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    @media (max-width: 820px) { .card-grid { grid-template-columns: 1fr; } }
+    .card { background: var(--panel); border: 1px solid var(--edge); border-radius: 16px; padding: 26px 24px; display: flex; flex-direction: column; gap: 8px; transition: border-color 0.2s; }
+    .card:hover { border-color: var(--edge); }
+    .card .abi { font-family: var(--mono); font-size: 12px; color: var(--blood); letter-spacing: 1px; }
+    .card h4 { font-family: var(--display); font-weight: 700; font-size: 19px; }
+    .card .desc { font-size: 13.5px; color: var(--ash); line-height: 1.55; }
+    .card .desc b { color: var(--moon); }
+    .card .lbl { font-family: var(--mono); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ash); margin-top: 6px; }
+    .repo { display: flex; gap: 8px; align-items: center; background: var(--void); border: 1px solid var(--edge); border-radius: 10px; padding: 5px 5px 5px 12px; }
+    .repo code { font-family: var(--mono); font-size: 10.5px; color: var(--ash); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .repo button { font-family: var(--mono); font-size: 11px; font-weight: 700; background: var(--panel-2); border: 1px solid var(--edge); color: var(--moon); border-radius: 8px; padding: 7px 11px; cursor: pointer; transition: 0.18s; flex: 0 0 auto; }
+    .repo button:hover { border-color: var(--blood); color: var(--blood); }
+    .repo button.done { border-color: #4ec07a; color: #4ec07a; }
+    .card .foot-note { font-family: var(--mono); font-size: 10.5px; color: var(--ash); margin-top: auto; padding-top: 6px; }
 
-  /* tips */
-  .tips{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding:22px 0 6px}
-  .tip{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:20px}
-  .tip .t-t{font-family:var(--disp);font-weight:700;font-size:15px;display:flex;align-items:center;gap:10px;margin-bottom:7px}
-  .tip .t-ic{width:30px;height:30px;border-radius:8px;background:var(--surface2);border:1px solid var(--line);display:grid;place-items:center;color:var(--accent);font-size:15px}
-  .tip .t-d{color:var(--txt2);font-size:14px}
-  .signin{color:var(--txt3);font-size:13.5px;margin-top:20px}
-  .signin b{color:var(--txt2);font-weight:600}
+    /* Feature grid (how to watch) */
+    .feat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--edge); border: 1px solid var(--edge); border-radius: 16px; overflow: hidden; }
+    @media (max-width: 900px) { .feat-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .feat-grid { grid-template-columns: 1fr; } }
+    .feat { background: var(--panel); padding: 28px 24px; }
+    .feat .ic { width: 30px; height: 30px; color: var(--blood); margin-bottom: 15px; }
+    .feat h3 { font-family: var(--display); font-weight: 700; font-size: 16px; letter-spacing: 0.2px; margin-bottom: 7px; }
+    .feat p { font-size: 13.5px; color: var(--ash); line-height: 1.5; }
+    .feat p b { color: var(--moon); font-weight: 600; }
 
-  /* faq */
-  .trouble{display:grid;grid-template-columns:280px 1fr;gap:48px;align-items:start;
-    padding-top:56px;border-top:1px solid var(--line);margin-top:22px}
-  .trouble .t-head .h2{margin-top:10px}
-  .trouble .t-head .h2-sub{margin-top:8px}
-  .faq{display:flex;flex-direction:column;gap:9px}
-  .q{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-  .q>button{width:100%;text-align:left;background:0;border:0;color:var(--txt);
-    font-family:var(--disp);font-weight:600;font-size:15px;padding:16px 18px;cursor:pointer;
-    display:flex;justify-content:space-between;align-items:center;gap:12px}
-  .q>button .pm{color:var(--accent);transition:.2s;font-size:15px}
-  .q.open>button .pm{transform:rotate(45deg)}
-  .q .ans{max-height:0;overflow:hidden;transition:max-height .3s ease}
-  .q .ans p{margin:0;padding:0 18px 18px;color:var(--txt2);font-size:14.5px}
-  .q .ans .k{font-family:var(--disp);font-weight:600;color:var(--txt);font-size:13px;background:var(--surface2);border:1px solid var(--line);border-radius:5px;padding:1px 7px}
+    /* FAQ grid */
+    .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--edge); border: 1px solid var(--edge); border-radius: 16px; overflow: hidden; }
+    @media (max-width: 720px) { .faq-grid { grid-template-columns: 1fr; } }
+    .faq { background: var(--panel); padding: 26px 24px; }
+    .faq h4 { font-family: var(--display); font-weight: 700; font-size: 16px; margin-bottom: 8px; }
+    .faq p { color: var(--ash); font-size: 14px; line-height: 1.55; }
+    .faq .k { font-family: var(--mono); font-size: 11px; color: var(--moon); background: var(--panel-2); border: 1px solid var(--edge); border-radius: 5px; padding: 1px 6px; }
 
-  footer{border-top:1px solid var(--line);margin-top:52px;padding:44px 0}
-  .foot-grid{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
-  .dl-row{display:flex;gap:10px;flex-wrap:wrap}
-  .dl{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:11px 16px;text-decoration:none;transition:.18s}
-  .dl:hover{border-color:var(--accent)}
-  .dl .dl-t{font-family:var(--disp);font-weight:600;font-size:13.5px}
-  .dl .dl-d{font-size:11px;color:var(--txt3);margin-top:1px}
-  .dl.rec .dl-t{color:var(--accent)}
-  .foot-note{color:var(--txt3);font-size:12.5px}
+    /* Footer */
+    .foot { border-top: 1px solid var(--edge); padding: 44px 0 54px; }
+    .foot .wrap { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; align-items: center; }
+    .foot .logo { font-size: 18px; }
+    .foot p { font-size: 13px; color: var(--ash); max-width: 46ch; }
+    .foot a.gh { font-size: 13px; color: var(--ash); letter-spacing: 1px; text-transform: uppercase; }
+    .foot a.gh:hover { color: var(--moon); }
 
-  .reveal{opacity:0;transform:translateY(18px);transition:.55s cubic-bezier(.2,.7,.2,1)}
-  .reveal.in{opacity:1;transform:none}
-  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+    .dl-note { margin-top: 26px; font-size: 13.5px; color: var(--ash); display: flex; gap: 10px; align-items: flex-start; }
+    .dl-note svg { color: var(--blood); flex-shrink: 0; margin-top: 2px; width: 18px; height: 18px; }
 
-  @media(max-width:760px){
-    .step,.step:nth-child(even){grid-template-columns:1fr;gap:22px;padding:24px}
-    .step .s-visual,.step:nth-child(even) .s-visual{order:2}
-    .step .s-body,.step:nth-child(even) .s-body{order:1}
-    .tips{grid-template-columns:1fr}
-    .eco-grid{grid-template-columns:1fr}
-    .trouble{grid-template-columns:1fr;gap:18px;padding-top:44px}
-    .phone{width:min(280px,82vw)}
-  }
-  @media(max-width:520px){
-    .wrap{padding:0 16px}
-    .hero{padding:46px 0 26px}
-    .sec-head{padding:38px 0 6px}
-    .step{padding:38px 0;gap:28px}
-    .step:first-child{padding-top:20px}
-    .eco{padding:18px}
-    .tip{padding:17px}
-    .cta-row{flex-direction:column;align-items:stretch}
-    .btn{justify-content:center}
-    .foot-grid{flex-direction:column;align-items:flex-start;gap:22px}
-    .dl-row{width:100%}.dl{flex:1;min-width:110px}
-    .bar{height:52px}
-    .q>button{font-size:14px;padding:15px 15px}
-  }
-</style>
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; scroll-behavior: auto; } .reveal { opacity: 1; transform: none; transition: none; } }
+  </style>
 </head>
 <body>
-
-<!-- icon sprite -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-  <symbol id="i-dl" viewBox="0 0 24 24"><path d="M12 3v11m0 0-4-4m4 4 4-4M5 20h14"/></symbol>
-  <symbol id="i-box" viewBox="0 0 24 24"><path d="M3.3 7.3 12 12l8.7-4.7M12 12v9M4 7.5 12 3l8 4.5v9L12 21l-8-4.5z"/></symbol>
-  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.7 3 2.7 15 0 18M12 3c-2.7 3-2.7 15 0 18"/></symbol>
-  <symbol id="i-browser" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 8h18M7 6h.01M10 6h.01"/></symbol>
-  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
-  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.4 3 7.6 7 9 4-1.4 7-4.6 7-9V6z"/><path d="m9 12 2 2 4-4"/></symbol>
-  <symbol id="i-puzzle" viewBox="0 0 24 24"><path d="M10 4a1.5 1.5 0 0 1 3 0c0 .8.7 1.2 1.5 1H17a1 1 0 0 1 1 1v2.5c-.2.8.2 1.5 1 1.5a1.5 1.5 0 0 1 0 3c-.8 0-1.2.7-1 1.5V18a1 1 0 0 1-1 1h-2.5c-.8-.2-1.5.2-1.5 1a1.5 1.5 0 0 1-3 0c0-.8-.7-1.2-1.5-1H6a1 1 0 0 1-1-1v-2.5c.2-.8-.2-1.5-1-1.5a1.5 1.5 0 0 1 0-3c.8 0 1.2-.7 1-1.5V6a1 1 0 0 1 1-1h2.5c.8.2 1.5-.2 1.5-1z"/></symbol>
-  <symbol id="i-film" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 4v16M17 4v16M3 9h4M3 15h4M17 9h4M17 15h4"/></symbol>
-  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
-  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></symbol>
-  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v3.5h-3.5"/></symbol>
-  <symbol id="i-save" viewBox="0 0 24 24"><path d="M12 3v11m0 0-4-4m4 4 4-4M5 20h14"/></symbol>
-  <symbol id="i-add" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
-  <symbol id="i-github" viewBox="0 0 24 24"><path d="M9 19c-4 1.5-4-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1-.3-3.4 1.3a11.6 11.6 0 0 0-6 0C6.3 2.3 5.3 2.6 5.3 2.6a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 3.9 9c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></symbol>
-  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></symbol>
-  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
-</defs></svg>
-
-<header>
-  <div class="wrap bar">
-    <div class="brand"><span class="blade">†</span>Zangetsu</div>
-    <nav class="steps-dots" aria-label="Progress">
-      <a href="#s1" data-dot="s1" class="on"></a><a href="#s2" data-dot="s2"></a><a href="#more" data-dot="more"></a>
-    </nav>
-    <a class="gh" href="https://github.com/Spyou/Zangetsu" target="_blank" rel="noopener"><svg class="ic"><use href="#i-github"/></svg>GitHub</a>
-  </div>
-</header>
-
-<section class="hero wrap">
-  <div class="hero-inner">
-    <div class="eyebrow">Install guide</div>
-    <h1>Install Zangetsu in <span class="hl">two steps.</span></h1>
-    <p class="sub">Install the app, then tap <b>Get Started</b> — the app downloads and sets up its sources for you.</p>
-    <div class="cta-row">
-      <a class="btn btn-primary" href="#s1"><svg class="ic"><use href="#i-dl"/></svg>Start installing</a>
-      <a class="btn btn-ghost" href="#trouble">Troubleshooting</a>
+  <nav class="nav">
+    <div class="wrap">
+      <a class="logo" href="/">ZANGE<b>&dagger;</b>SU</a>
+      <div class="nav-links">
+        <a href="/#features">Features</a>
+        <a href="/#screens">Phone &amp; TV</a>
+        <a href="/install/" class="on">Install</a>
+        <a class="nav-cta" href="https://github.com/Spyou/Zangetsu/releases/latest">Get the app</a>
+      </div>
     </div>
-  </div>
-</section>
+  </nav>
 
-<main class="steps wrap">
-
-  <article class="step reveal" id="s1">
-    <div class="s-body">
-      <div class="s-num"><span class="n">1</span><span class="lbl">Download</span></div>
-      <h2 class="s-title">Download the app</h2>
-      <p class="s-desc">Tap <b>Download APK</b> and choose <span class="k">arm64</span> — it fits nearly every phone from the last several years (or <span class="k">universal</span> if you're unsure). Once it downloads, <b>tap the file to install</b>.</p>
-      <div class="callout"><svg class="ic"><use href="#i-shield"/></svg><span>An <b>.apk</b> is how Android apps install outside the Play Store.</span></div>
+  <header class="hero">
+    <div class="kanji" aria-hidden="true">斬月</div>
+    <div class="wrap">
+      <span class="eyebrow"><span class="jp">斬月</span> Install guide</span>
+      <h1 class="title">Install &amp; set<span class="cut"> </span>up</h1>
+      <p class="lede">Install the app, tap <b>Get Started</b>, and Zangetsu sets up its sources for you — anime, movies and TV.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://github.com/Spyou/Zangetsu/releases/latest">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>
+          Download APK <span class="ver">latest</span>
+        </a>
+        <a class="btn btn-ghost" href="#steps">How it works</a>
+      </div>
     </div>
-    <div class="s-visual">
-      <div class="phone"><div class="notch"></div><div class="screen">
-        <div class="sbar"><span>9:41</span><span>100%</span></div>
-        <div class="scr-body">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:3px">
-            <div class="applogo">†</div>
-            <div><div class="scr-title" style="font-size:13.5px">Zangetsu</div><div style="font-size:9.5px;color:var(--txt3)">Anime · Movies · TV</div></div>
-          </div>
-          <div class="bigbtn"><svg class="ic"><use href="#i-dl"/></svg>Download APK · arm64</div>
-          <div class="applead" style="margin-top:3px">Or pick a version</div>
-          <div class="row-item"><div class="ri-l"><span class="ri-ic"><svg class="ic"><use href="#i-box"/></svg></span>armeabi-v7a · older</div><svg class="ic chev"><use href="#i-chevron"/></svg></div>
-          <div class="row-item"><div class="ri-l"><span class="ri-ic"><svg class="ic"><use href="#i-globe"/></svg></span>universal · any device</div><svg class="ic chev"><use href="#i-chevron"/></svg></div>
-          <div style="margin-top:8px;font-size:10px;color:var(--txt3);text-align:center">Latest release · Android 5.0 and up</div>
+  </header>
+
+  <!-- Steps -->
+  <section class="section" id="steps">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="sec-tag">Two steps</span><h2 class="sec-title">Install</h2></div>
+      <div class="split reveal">
+        <div>
+          <div class="k">Step 01 · Download</div>
+          <h3>Download the app</h3>
+          <p>Tap <b>Download APK</b> and pick <b>arm64</b> — it fits nearly every phone from the last several years (or <b>universal</b> if you're unsure). Once it downloads, <b>tap the file to install</b>. An .apk is how Android apps install outside the Play Store.</p>
+          <a class="btn btn-primary" href="https://github.com/Spyou/Zangetsu/releases/latest">Download APK <span class="ver">latest</span></a>
         </div>
-      </div></div>
-    </div>
-  </article>
-
-  <article class="step reveal" id="s2">
-    <div class="s-body">
-      <div class="s-num"><span class="n">2</span><span class="lbl">Open &amp; get started</span></div>
-      <h2 class="s-title">Open it — sources set themselves up</h2>
-      <p class="s-desc">Open Zangetsu and tap <b>Get Started</b>. It downloads the official source catalog and shows <b>“You're all set!”</b>. Your sources — anime, movies and TV — are now installed, no manual setup.</p>
-      <div class="callout"><svg class="ic"><use href="#i-shield"/></svg><span>Prefer to explore first? Tap <b>Skip for now</b> — you can add sources any time in <b>Settings → Providers</b>.</span></div>
-    </div>
-    <div class="s-visual">
-      <div class="phone"><div class="notch"></div><div class="screen">
-        <div class="sbar"><span>9:41</span><span>100%</span></div>
-        <div class="scr-body" style="justify-content:center">
-          <div class="emblem" style="font-size:20px;font-family:var(--disp);font-weight:800">†</div>
-          <div class="scr-title" style="font-size:15px;text-align:center">Welcome to Zangetsu</div>
-          <div style="font-size:9.5px;color:var(--txt3);margin-bottom:13px;text-align:center">Anime, movies and TV in one place</div>
-          <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:15px">
-            <div class="feat"><span class="fchk"><svg class="ic"><use href="#i-check"/></svg></span>Multiple streaming sources</div>
-            <div class="feat"><span class="fchk"><svg class="ic"><use href="#i-check"/></svg></span>Up to 4K / HDR streams</div>
-            <div class="feat"><span class="fchk"><svg class="ic"><use href="#i-check"/></svg></span>Auto-updating sources</div>
-          </div>
-          <div class="bigbtn">Get Started</div>
-          <div style="font-size:11.5px;color:var(--txt2);margin-top:9px;text-align:center">Skip for now</div>
+        <div>
+          <div class="k">Step 02 · Set up</div>
+          <h3>Open &amp; tap Get Started</h3>
+          <p>Open Zangetsu and tap <b>Get Started</b>. It downloads the official source catalog and shows <b>“You're all set!”</b> — your sources (anime, movies and TV) are installed, no manual setup.</p>
+          <p class="after" style="color:var(--ash)">Prefer to explore first? Tap <b>Skip for now</b> — you can add sources any time in <b>Settings → Providers</b>.</p>
         </div>
-      </div></div>
+      </div>
     </div>
-  </article>
-</main>
+  </section>
 
-<!-- OPTIONAL: MORE SOURCES -->
-<section class="sec-head wrap" id="more">
-  <div class="kicker">Optional · for even more</div>
-  <div class="h2">Add <span class="hl">more sources</span></div>
-  <p class="h2-sub">The official catalog is installed at setup — anime, movies and TV. Want even more? Add extra sources: in the app go to <b>Profile → Providers</b>, open an ecosystem, tap <b>Add repo</b>, then <b>Install</b> the sources you want.</p>
-</section>
-
-<div class="wrap">
-  <div class="eco-grid">
-    <div class="eco reveal">
-      <div class="eco-h"><div class="eco-ic"><svg class="ic"><use href="#i-puzzle"/></svg></div>
-        <div><div class="eco-name">CloudStream</div><div class="eco-for">movies · TV · anime</div></div></div>
-      <div class="eco-path"><span class="k">Providers → CloudStream → Add CloudStream repo</span>. Tap a recommended one, or paste a link, then <b>Add</b>. In the <b>Installed</b> tab, hit <b>Install</b> on the sources you want.</div>
-      <div class="eco-label">Recommended — one tap in the app, or copy</div>
-      <div class="copy"><div class="cw"><div class="cn">Phisher</div><code>phisher98/cloudstream-extensions-phisher · repo.json</code></div>
-        <button data-copy="https://raw.githubusercontent.com/phisher98/cloudstream-extensions-phisher/refs/heads/builds/repo.json">Copy</button></div>
-      <div class="copy"><div class="cw"><div class="cn">CNC — All Languages</div><code>NivinCNC/CNCVerse-Cloud-Stream-Extension · CNC.json</code></div>
-        <button data-copy="https://raw.githubusercontent.com/NivinCNC/CNCVerse-Cloud-Stream-Extension/refs/heads/builds/CNC.json">Copy</button></div>
-      <div class="eco-note">Paste the full <code>repo.json</code> link. Android only.</div>
+  <!-- More sources -->
+  <section class="section" id="sources">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="sec-tag">Optional · for even more</span><h2 class="sec-title">Add more sources</h2></div>
+      <p class="sec-lede reveal">The official catalog is installed at setup. Want even more? In the app go to <b>Profile → Providers</b>, open an ecosystem, tap <b>Add repo</b>, then <b>Install</b> the sources you want.</p>
+      <div class="card-grid reveal">
+        <div class="card">
+          <span class="abi">CloudStream</span>
+          <h4>Movies · TV · anime</h4>
+          <p class="desc"><b>Providers → CloudStream → Add CloudStream repo</b>. Tap a recommended one or paste a link, then <b>Add</b>. In the <b>Installed</b> tab, hit <b>Install</b>.</p>
+          <div class="lbl">Recommended — one tap in-app, or copy</div>
+          <div class="repo"><code>phisher98/…/repo.json</code><button data-copy="https://raw.githubusercontent.com/phisher98/cloudstream-extensions-phisher/refs/heads/builds/repo.json">Copy</button></div>
+          <div class="repo"><code>NivinCNC/…/CNC.json</code><button data-copy="https://raw.githubusercontent.com/NivinCNC/CNCVerse-Cloud-Stream-Extension/refs/heads/builds/CNC.json">Copy</button></div>
+          <div class="foot-note">Paste the full repo.json · Android only</div>
+        </div>
+        <div class="card">
+          <span class="abi">Aniyomi</span>
+          <h4>More anime extensions</h4>
+          <p class="desc"><b>Providers → Aniyomi → Add Aniyomi repo</b>. Paste the repo's <b>base URL</b> — the app adds <b>/index.min.json</b> for you — then <b>Add</b> and <b>Install</b>.</p>
+          <div class="lbl">Recommended — one tap in-app, or copy</div>
+          <div class="repo"><code>yuzono/anime-repo · base URL</code><button data-copy="https://raw.githubusercontent.com/yuzono/anime-repo/repo">Copy</button></div>
+          <div class="foot-note">Base URL only, no /index.min.json · Android only</div>
+        </div>
+        <div class="card">
+          <span class="abi">Zangetsu</span>
+          <h4>Built-in providers</h4>
+          <p class="desc">Installed from setup already. To add another: <b>Providers → Zangetsu → Add Zangetsu repo</b>. Paste the <b>Manifest URL</b> (its index.json), then <b>Add</b> and <b>Install</b>.</p>
+          <div class="lbl">Installed automatically at first launch</div>
+          <div class="repo"><code>Spyou/zangetsu-providers · index.json</code><button data-copy="https://raw.githubusercontent.com/Spyou/zangetsu-providers/main/index.json">Copy</button></div>
+          <div class="foot-note">Paste the index.json, not a single .js file</div>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <div class="eco reveal">
-      <div class="eco-h"><div class="eco-ic"><svg class="ic"><use href="#i-film"/></svg></div>
-        <div><div class="eco-name">Aniyomi</div><div class="eco-for">more anime extensions</div></div></div>
-      <div class="eco-path"><span class="k">Providers → Aniyomi → Add Aniyomi repo</span>. Paste the repo's <b>base URL</b> — the app adds <code>/index.min.json</code> for you — tap <b>Add</b>, then <b>Install</b> extensions.</div>
-      <div class="eco-label">Recommended — one tap in the app, or copy</div>
-      <div class="copy"><div class="cw"><div class="cn">Yuzono Anime</div><code>yuzono/anime-repo · base URL</code></div>
-        <button data-copy="https://raw.githubusercontent.com/yuzono/anime-repo/repo">Copy</button></div>
-      <div class="eco-note">Paste the <b>base URL</b> only — no <code>/index.min.json</code>. Android only.</div>
+  <!-- How to watch -->
+  <section class="section">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="sec-tag">Once you're in</span><h2 class="sec-title">How to watch</h2></div>
+      <div class="feat-grid reveal">
+        <div class="feat">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <h3>Find something</h3>
+          <p>Scroll the rows on <b>Home</b>, or tap <b>Search</b> at the bottom for a specific title.</p>
+        </div>
+        <div class="feat">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 4.5v15l13-7.5z" fill="currentColor" stroke="none"/></svg>
+          <h3>Watch it</h3>
+          <p>Open a title and tap <b>Play</b>. For a series, pick an episode first.</p>
+        </div>
+        <div class="feat">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v3.5h-3.5"/></svg>
+          <h3>If it won't load</h3>
+          <p>Tap the <b>source name at the top</b> and switch — some go down temporarily.</p>
+        </div>
+        <div class="feat">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>
+          <h3>Save for offline</h3>
+          <p>On a title, tap <b>Download</b> — watch it later under <b>Downloads</b>.</p>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <div class="eco reveal">
-      <div class="eco-h"><div class="eco-ic" style="font-family:var(--disp);font-weight:800">†</div>
-        <div><div class="eco-name">Zangetsu</div><div class="eco-for">built-in providers</div></div></div>
-      <div class="eco-path">Installed from setup already. To add another: <span class="k">Providers → Zangetsu → Add Zangetsu repo</span>. Paste the repo's <b>Manifest URL</b> — its <code>index.json</code> — tap <b>Add</b>, then <b>Install</b>.</div>
-      <div class="eco-label">Installed automatically at first launch</div>
-      <div class="copy"><div class="cw"><div class="cn">Official Zangetsu catalog</div><code>Spyou/zangetsu-providers · index.json</code></div>
-        <button data-copy="https://raw.githubusercontent.com/Spyou/zangetsu-providers/main/index.json">Copy</button></div>
-      <div class="eco-note">Paste the repo's <code>index.json</code>, not a single <code>.js</code> file.</div>
+  <!-- Troubleshooting -->
+  <section class="section" id="help">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="sec-tag">Troubleshooting</span><h2 class="sec-title">Quick fixes</h2></div>
+      <div class="faq-grid reveal">
+        <div class="faq">
+          <h4>“App not installed”</h4>
+          <p>Usually an old copy is in the way, or the download was incomplete. Uninstall any old Zangetsu, re-download fully, and pick <span class="k">arm64</span> (or <span class="k">universal</span> if unsure).</p>
+        </div>
+        <div class="faq">
+          <h4>A title won't play</h4>
+          <p>Tap the <b>source name at the top</b> and switch, or pick a different server. If a whole source looks dead, check <span class="k">Settings → Source health</span> or add another.</p>
+        </div>
+        <div class="faq">
+          <h4>Sources won't download at setup</h4>
+          <p>Check your internet and tap <span class="k">Try Again</span>. Some ISPs block GitHub — turn on <span class="k">Settings → DNS</span> (Cloudflare) and retry, or <span class="k">Skip for now</span> and add sources later.</p>
+        </div>
+        <div class="faq">
+          <h4>Do I need an account?</h4>
+          <p>No. Everything works without one. Sign in only to sync your list and history across devices — <span class="k">Settings → Connections</span>.</p>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+  </section>
 
-<!-- HOW TO WATCH -->
-<section class="sec-head wrap">
-  <div class="kicker">Once you're in</div>
-  <div class="h2">How to watch</div>
-  <p class="h2-sub">Four things worth knowing.</p>
-</section>
-<div class="wrap">
-  <div class="tips">
-    <div class="tip reveal"><div class="t-t"><span class="t-ic"><svg class="ic"><use href="#i-search"/></svg></span>Find something</div><div class="t-d">Scroll the rows on <b>Home</b>, or tap <b>Search</b> at the bottom to find a specific title.</div></div>
-    <div class="tip reveal"><div class="t-t"><span class="t-ic"><svg class="ic fill"><use href="#i-play"/></svg></span>Watch it</div><div class="t-d">Open a title and tap <b>Play</b>. For a series, pick an episode first.</div></div>
-    <div class="tip reveal"><div class="t-t"><span class="t-ic"><svg class="ic"><use href="#i-refresh"/></svg></span>If it won't load</div><div class="t-d">Tap the <b>source name at the top</b> and switch to another source — some go down temporarily.</div></div>
-    <div class="tip reveal"><div class="t-t"><span class="t-ic"><svg class="ic"><use href="#i-save"/></svg></span>Save for offline</div><div class="t-d">On a title, tap <b>Download</b> — watch it later under <b>Downloads</b>.</div></div>
-  </div>
-  <p class="signin">Want your list and history on every device? <b>Settings → Connections</b> to sign in. Optional — everything works without an account.</p>
-</div>
-
-<!-- TROUBLESHOOTING -->
-<section class="wrap trouble" id="trouble">
-  <div class="t-head">
-    <div class="kicker">Troubleshooting</div>
-    <div class="h2">Stuck? Quick fixes</div>
-    <p class="h2-sub">The things people hit most.</p>
-  </div>
-  <div class="faq">
-    <div class="q"><button>“App not installed”<span class="pm"><svg class="ic"><use href="#i-add"/></svg></span></button>
-      <div class="ans"><p>Usually an old copy is in the way, or the download was incomplete. Uninstall any old Zangetsu, re-download the APK fully, and pick <span class="k">arm64</span> (or <span class="k">universal</span> if unsure).</p></div></div>
-    <div class="q"><button>A title won't play<span class="pm"><svg class="ic"><use href="#i-add"/></svg></span></button>
-      <div class="ans"><p>Tap the <b>source name at the top</b> and switch to another source, or pick a different server on the episode. If a whole source looks dead, check <span class="k">Settings → Source health</span>, or add another source.</p></div></div>
-    <div class="q"><button>Sources won't download during setup<span class="pm"><svg class="ic"><use href="#i-add"/></svg></span></button>
-      <div class="ans"><p>Check your internet and tap <span class="k">Try Again</span>. Some ISPs block GitHub — turn on <span class="k">Settings → DNS</span> (Cloudflare) and retry. You can also tap <span class="k">Skip for now</span> and add sources later.</p></div></div>
-  </div>
-</section>
-
-<footer>
-  <div class="wrap foot-grid">
-    <div>
-      <div class="brand" style="margin-bottom:14px"><span class="blade">†</span>Zangetsu</div>
-      <div class="foot-note">Android 5.0 and up · optional login for cross-device sync</div>
+  <footer class="foot">
+    <div class="wrap">
+      <div>
+        <a class="logo" href="/">ZANGE<b>&dagger;</b>SU</a>
+        <p>Free and open. Zangetsu isn't affiliated with any streaming service — it plays third-party sources you choose.</p>
+      </div>
+      <a class="gh" href="https://github.com/Spyou/Zangetsu" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
-    <div class="dl-row">
-      <a class="dl rec" href="https://github.com/Spyou/Zangetsu/releases/latest" target="_blank" rel="noopener"><div class="dl-t">Download · arm64</div><div class="dl-d">recommended</div></a>
-      <a class="dl" href="https://github.com/Spyou/Zangetsu/releases/latest" target="_blank" rel="noopener"><div class="dl-t">armeabi-v7a</div><div class="dl-d">older phones</div></a>
-      <a class="dl" href="https://github.com/Spyou/Zangetsu/releases/latest" target="_blank" rel="noopener"><div class="dl-t">universal</div><div class="dl-d">any device</div></a>
-    </div>
-  </div>
-</footer>
+  </footer>
 
-<script>
-  document.querySelectorAll('[data-copy]').forEach(b=>{
-    b.addEventListener('click',()=>{
-      navigator.clipboard?.writeText(b.dataset.copy).then(()=>{
-        b.textContent='Copied';b.classList.add('done');
-        setTimeout(()=>{b.textContent='Copy';b.classList.remove('done')},1400);
+  <script>
+    document.querySelectorAll('[data-copy]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        navigator.clipboard && navigator.clipboard.writeText(b.dataset.copy).then(function () {
+          b.textContent = 'Copied'; b.classList.add('done');
+          setTimeout(function () { b.textContent = 'Copy'; b.classList.remove('done'); }, 1400);
+        });
       });
     });
-  });
-  document.querySelectorAll('.q>button').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      const q=btn.parentElement,ans=q.querySelector('.ans');
-      const open=q.classList.toggle('open');
-      ans.style.maxHeight=open?ans.scrollHeight+'px':0;
-    });
-  });
-  const dots=document.querySelectorAll('.steps-dots a');
-  const io=new IntersectionObserver(es=>{es.forEach(e=>{
-    if(e.isIntersecting){e.target.classList.add('in');
-      if(e.target.id){dots.forEach(d=>d.classList.toggle('on',d.dataset.dot===e.target.id));}}
-  });},{threshold:.3});
-  document.querySelectorAll('.reveal,#s1,#s2,#more').forEach(el=>io.observe(el));
-</script>
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+  </script>
 </body>
 </html>
