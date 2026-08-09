@@ -126,19 +126,6 @@
     if (!res || res.ok !== true) throw new Error(res && res.error || "drop_failed");
   }
 
-  // ── AniList: implicit grant, token in the URL fragment (fully client-side) ────
-  async function anilistViewer(token) {
-    const r = await fetch("https://graphql.anilist.co", {
-      method: "POST",
-      headers: { "content-type": "application/json", authorization: "Bearer " + token },
-      body: JSON.stringify({ query: "{Viewer{id name avatar{medium}}}" }),
-    });
-    const j = await r.json();
-    const v = j && j.data && j.data.Viewer;
-    if (!v) throw new Error("viewer_failed");
-    return { id: v.id, name: v.name, avatar: v.avatar && v.avatar.medium };
-  }
-
   // ── Flow ──────────────────────────────────────────────────────────────────────
   async function main() {
     const q = new URLSearchParams(location.search);
@@ -154,8 +141,11 @@
       }));
       const u = REDIRECT;
       if (tracker === "anilist") {
+        // Authorization-code grant (not implicit) — AniList's implicit grant
+        // fails for an https web redirect; the function swaps the code for a
+        // token using the client secret. Same shape as MAL/Simkl below.
         location.replace("https://anilist.co/api/v2/oauth/authorize?client_id=" +
-          CLIENTS.anilist + "&response_type=token&redirect_uri=" + encodeURIComponent(u));
+          CLIENTS.anilist + "&response_type=code&redirect_uri=" + encodeURIComponent(u));
       } else if (tracker === "mal") {
         location.replace("https://myanimelist.net/v1/oauth2/authorize?response_type=code&client_id=" +
           CLIENTS.mal + "&code_challenge=" + verifier + "&code_challenge_method=plain&redirect_uri=" +
@@ -172,30 +162,22 @@
     if (saved) {
       working("Finishing sign-in…", "Sending " + (LABEL[saved.tracker] || "tracker") + " to your TV.");
       try {
-        let session;
-        if (saved.tracker === "anilist") {
-          const token = frag.get("access_token");
-          if (!token) return fail(frag.get("error_description") || "AniList didn't return a token.");
-          const expiresAt = Date.now() + (parseInt(frag.get("expires_in") || "31536000", 10)) * 1000;
-          const v = await anilistViewer(token);
-          session = { accessToken: token, expiresAt, viewerId: v.id, viewerName: v.name, viewerAvatar: v.avatar };
-        } else {
-          // MAL / Simkl: auth code in the query → the function swaps it for a
-          // token + viewer (it holds the secret / avoids browser CORS) and
-          // returns the ready session map. We still encrypt here, so the token
-          // is never stored in the clear.
-          const code = q.get("code");
-          if (!code) return fail("No authorization code returned.");
-          const res = await callFn({
-            action: "exchange", tracker: saved.tracker, code,
-            codeVerifier: saved.verifier, redirectUri: REDIRECT,
-          });
-          if (!res || res.ok !== true || !res.session) {
-            return fail((res && res.error) || "Token exchange failed.");
-          }
-          session = res.session;
+        // All three use the auth-code grant, so the provider redirected back
+        // with ?code=… . The function swaps it for a ready session (it holds
+        // the secrets / avoids browser CORS + AniList's implicit-on-web issue).
+        // We encrypt here, so the token is never stored in the clear.
+        const code = q.get("code");
+        if (!code) {
+          return fail(q.get("error") ? "Login failed: " + q.get("error") : "No authorization code returned.");
         }
-        await relay(saved.code, saved.nonce, saved.tracker, session);
+        const res = await callFn({
+          action: "exchange", tracker: saved.tracker, code,
+          codeVerifier: saved.verifier, redirectUri: REDIRECT,
+        });
+        if (!res || res.ok !== true || !res.session) {
+          return fail((res && res.error) || "Token exchange failed.");
+        }
+        await relay(saved.code, saved.nonce, saved.tracker, res.session);
         sessionStorage.removeItem("tvpair");
         done("You can head back to your TV — " + (LABEL[saved.tracker] || "your tracker") + " is connected.");
       } catch (e) {
