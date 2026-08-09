@@ -166,9 +166,12 @@
         // with ?code=… . The function swaps it for a ready session (it holds
         // the secrets / avoids browser CORS + AniList's implicit-on-web issue).
         // We encrypt here, so the token is never stored in the clear.
-        const code = q.get("code");
+        const code = q.get("code") || frag.get("code");
         if (!code) {
-          return fail(q.get("error") ? "Login failed: " + q.get("error") : "No authorization code returned.");
+          const err = q.get("error") || frag.get("error");
+          return fail(err
+            ? "Login failed: " + err
+            : "No code returned. Got: " + ((location.search + location.hash) || "(nothing)"));
         }
         const res = await callFn({
           action: "exchange", tracker: saved.tracker, code,
