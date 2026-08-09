@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Connect to your TV — Zangetsu</title>
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#08070b" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; display: flex; align-items: center;
+      justify-content: center; padding: 24px;
+      background: #08070b; color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      text-align: center;
+    }
+    .card {
+      max-width: 420px; width: 100%; background: #14121a;
+      border: 1px solid #241f30; border-radius: 20px; padding: 32px 26px;
+    }
+    h1 { font-size: 20px; margin: 0 0 6px; }
+    p { color: #a99fbb; line-height: 1.5; margin: 10px 0 0; font-size: 15px; }
+    .spinner {
+      width: 34px; height: 34px; margin: 8px auto 4px; border-radius: 50%;
+      border: 3px solid #2b2540; border-top-color: #e5306e; animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .ok { color: #34d399; font-size: 40px; line-height: 1; }
+    .err { color: #f87171; }
+    .btn {
+      display: inline-block; margin-top: 20px; padding: 13px 22px;
+      background: #e5306e; color: #fff; border: 0; border-radius: 999px;
+      font-size: 15px; font-weight: 600; text-decoration: none; cursor: pointer;
+    }
+    .muted { font-size: 13px; color: #6f6684; margin-top: 18px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div id="icon"><div class="spinner"></div></div>
+    <h1 id="title">Connecting…</h1>
+    <p id="msg">One moment.</p>
+    <div id="actions"></div>
+    <div class="muted">Zangetsu · TV sign-in</div>
+  </div>
+
+  <script>
+  // ── Config (all public: anon key + client ids are already shipped in the app) ──
+  const SUPA_FN = "https://eogwzrlfoercfwcfwlmv.supabase.co/functions/v1/pair-tv";
+  const ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVvZ3d6cmxmb2VyY2Z3Y2Z3bG12Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjgzODIsImV4cCI6MjA5OTk0NDM4Mn0.qr-nHnB9vb7BodP55XJ9-6Rwp__eOGCS6txhLiuWVZw";
+  const REDIRECT = "https://zangetsu.online/tv-connect/";
+  const CLIENTS = {
+    anilist: "48181",
+    mal: "ac006943589381143c4c4e54eac93a89",
+    simkl: "8b847b09206ccdb0b3de4cc1293d6dd7d355821f5c179c57315da8ba9030eb53",
+  };
+  const LABEL = { anilist: "AniList", mal: "MyAnimeList", simkl: "Simkl" };
+
+  // ── UI helpers ──────────────────────────────────────────────────────────────
+  function ui(icon, title, msg, cls) {
+    document.getElementById("icon").innerHTML = icon;
+    document.getElementById("title").textContent = title;
+    const m = document.getElementById("msg"); m.textContent = msg;
+    m.className = cls === "err" ? "err" : "";
+  }
+  function working(t, m) { ui('<div class="spinner"></div>', t, m); }
+  function done(m) { ui('<div class="ok">✓</div>', "Connected!", m); }
+  function fail(m) {
+    ui('<div class="ok err">!</div>', "Couldn't connect", m, "err");
+    const a = document.getElementById("actions");
+    a.innerHTML = '<a class="btn" href="' + REDIRECT + '?retry=1">Try again</a>';
+  }
+
+  // ── base64url <-> bytes (unpadded, matches Dart TrackerRelayCrypto) ───────────
+  function b64urlToBytes(s) {
+    s = s.replace(/-/g, "+").replace(/_/g, "/");
+    while (s.length % 4) s += "=";
+    const bin = atob(s);
+    const out = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out;
+  }
+  function bytesToB64url(bytes) {
+    let bin = "";
+    for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  }
+
+  // AES-256-GCM: key = base64url-decoded nonce (32B); out = b64url(iv(12) || ct+tag).
+  // Byte-identical to TrackerRelayCrypto.encrypt so the TV can decrypt with its nonce.
+  async function encryptBlob(plaintext, nonceKey) {
+    const key = await crypto.subtle.importKey(
+      "raw", b64urlToBytes(nonceKey), "AES-GCM", false, ["encrypt"]);
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const ct = new Uint8Array(await crypto.subtle.encrypt(
+      { name: "AES-GCM", iv, tagLength: 128 }, key, new TextEncoder().encode(plaintext)));
+    const out = new Uint8Array(iv.length + ct.length);
+    out.set(iv); out.set(ct, iv.length);
+    return bytesToB64url(out);
+  }
+
+  function randToken(n) {
+    const b = crypto.getRandomValues(new Uint8Array(n));
+    return bytesToB64url(b).slice(0, n);
+  }
+
+  // ── Backend calls ─────────────────────────────────────────────────────────────
+  async function callFn(payload) {
+    const r = await fetch(SUPA_FN, {
+      method: "POST",
+      headers: { "content-type": "application/json", apikey: ANON, authorization: "Bearer " + ANON },
+      body: JSON.stringify(payload),
+    });
+    return r.json();
+  }
+
+  // Encrypt the session into the blob shape the app uses and drop it for the code.
+  async function relay(code, nonce, tracker, session) {
+    const blob = JSON.stringify({ v: 1, trackers: { [tracker]: session } });
+    const enc = await encryptBlob(blob, nonce);
+    const res = await callFn({ action: "drop", code, trackerBlob: enc });
+    if (!res || res.ok !== true) throw new Error(res && res.error || "drop_failed");
+  }
+
+  // ── AniList: implicit grant, token in the URL fragment (fully client-side) ────
+  async function anilistViewer(token) {
+    const r = await fetch("https://graphql.anilist.co", {
+      method: "POST",
+      headers: { "content-type": "application/json", authorization: "Bearer " + token },
+      body: JSON.stringify({ query: "{Viewer{id name avatar{medium}}}" }),
+    });
+    const j = await r.json();
+    const v = j && j.data && j.data.Viewer;
+    if (!v) throw new Error("viewer_failed");
+    return { id: v.id, name: v.name, avatar: v.avatar && v.avatar.medium };
+  }
+
+  // ── Flow ──────────────────────────────────────────────────────────────────────
+  async function main() {
+    const q = new URLSearchParams(location.search);
+    const frag = new URLSearchParams(location.hash.replace(/^#/, ""));
+
+    // First visit from the TV QR: ?code&nonce&tracker present → stash + go to OAuth.
+    if (q.get("nonce") && q.get("code") && q.get("tracker")) {
+      const tracker = q.get("tracker");
+      if (!CLIENTS[tracker]) return fail("Unknown tracker.");
+      const verifier = tracker === "mal" ? randToken(64) : null;
+      sessionStorage.setItem("tvpair", JSON.stringify({
+        code: q.get("code"), nonce: q.get("nonce"), tracker, verifier,
+      }));
+      const u = REDIRECT;
+      if (tracker === "anilist") {
+        location.replace("https://anilist.co/api/v2/oauth/authorize?client_id=" +
+          CLIENTS.anilist + "&response_type=token&redirect_uri=" + encodeURIComponent(u));
+      } else if (tracker === "mal") {
+        location.replace("https://myanimelist.net/v1/oauth2/authorize?response_type=code&client_id=" +
+          CLIENTS.mal + "&code_challenge=" + verifier + "&code_challenge_method=plain&redirect_uri=" +
+          encodeURIComponent(u));
+      } else { // simkl
+        location.replace("https://simkl.com/oauth/authorize?response_type=code&client_id=" +
+          CLIENTS.simkl + "&redirect_uri=" + encodeURIComponent(u));
+      }
+      return;
+    }
+
+    // Coming back from the provider.
+    const saved = JSON.parse(sessionStorage.getItem("tvpair") || "null");
+    if (saved) {
+      working("Finishing sign-in…", "Sending " + (LABEL[saved.tracker] || "tracker") + " to your TV.");
+      try {
+        let session;
+        if (saved.tracker === "anilist") {
+          const token = frag.get("access_token");
+          if (!token) return fail(frag.get("error_description") || "AniList didn't return a token.");
+          const expiresAt = Date.now() + (parseInt(frag.get("expires_in") || "31536000", 10)) * 1000;
+          const v = await anilistViewer(token);
+          session = { accessToken: token, expiresAt, viewerId: v.id, viewerName: v.name, viewerAvatar: v.avatar };
+        } else {
+          // MAL / Simkl: auth code in the query → the function swaps it for a
+          // token + viewer (it holds the secret / avoids browser CORS) and
+          // returns the ready session map. We still encrypt here, so the token
+          // is never stored in the clear.
+          const code = q.get("code");
+          if (!code) return fail("No authorization code returned.");
+          const res = await callFn({
+            action: "exchange", tracker: saved.tracker, code,
+            codeVerifier: saved.verifier, redirectUri: REDIRECT,
+          });
+          if (!res || res.ok !== true || !res.session) {
+            return fail((res && res.error) || "Token exchange failed.");
+          }
+          session = res.session;
+        }
+        await relay(saved.code, saved.nonce, saved.tracker, session);
+        sessionStorage.removeItem("tvpair");
+        done("You can head back to your TV — " + (LABEL[saved.tracker] || "your tracker") + " is connected.");
+      } catch (e) {
+        fail("Something went wrong. Please try again from the TV.");
+      }
+      return;
+    }
+
+    // Opened directly (no pairing context).
+    fail("Open this by scanning the QR code on your TV.");
+  }
+
+  main();
+  </script>
+</body>
+</html>
