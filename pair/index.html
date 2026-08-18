@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign in — Zangetsu</title>
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#0B0B0F" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0B0B0F;
+      --surface: #16161C;
+      --hairline: rgba(255, 255, 255, 0.08);
+      --accent: #FF4D57;
+      --text: #FFFFFF;
+      --secondary: #A7A7B2;
+      --tertiary: #6E6E78;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { min-height: 100%; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: Inter, -apple-system, "Segoe UI", Roboto, sans-serif;
+      padding: 24px;
+    }
+    .wrap { max-width: 400px; margin: 48px auto 24px; }
+    h1 {
+      font-size: 32px; font-weight: 700; letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+    .sub { margin-top: 8px; font-size: 15px; line-height: 1.35; color: var(--secondary); }
+    .device { margin-top: 10px; font-size: 13px; font-weight: 500; color: var(--tertiary); }
+    form { margin-top: 28px; }
+    .field {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--surface); border: 0.5px solid var(--hairline);
+      border-radius: 14px; padding: 0 16px; height: 52px;
+    }
+    .field + .field { margin-top: 12px; }
+    .field:focus-within { border-color: var(--accent); }
+    .field svg { flex: 0 0 20px; color: var(--tertiary); }
+    .field input {
+      flex: 1; min-width: 0; border: 0; outline: 0; background: transparent;
+      color: var(--text); font: 400 15px/1.35 Inter, sans-serif;
+    }
+    .field input::placeholder { color: var(--tertiary); }
+    .forgot {
+      display: block; width: 100%; margin: 4px 0 8px; padding: 8px 0;
+      border: 0; background: none; color: var(--accent);
+      font: 500 13px/1.3 Inter, sans-serif; text-align: right; cursor: pointer;
+    }
+    .err { color: var(--accent); font-size: 13px; font-weight: 500; margin: 0 0 10px; }
+    .err[hidden], .okmsg[hidden] { display: none; }
+    .okmsg { color: #4ec07a; font-size: 13px; font-weight: 500; margin: 0 0 10px; }
+    .primary {
+      width: 100%; height: 52px; border: 0; border-radius: 14px; margin-top: 20px;
+      background: #fff; color: #000; font: 600 16px/1 Inter, sans-serif;
+      letter-spacing: -0.2px; cursor: pointer;
+    }
+    .primary:disabled { opacity: 0.38; cursor: default; }
+    .open-app {
+      width: 100%; height: 52px; border: 0; border-radius: 14px; margin-top: 28px;
+      background: var(--accent); color: #fff; font: 600 16px/1 Inter, sans-serif;
+      letter-spacing: -0.2px; cursor: pointer;
+    }
+    .or {
+      display: flex; align-items: center; gap: 12px; margin: 22px 0 4px;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.8px; color: var(--tertiary);
+    }
+    .or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--hairline); }
+    .spin-wrap {
+      display: flex; justify-content: center; height: 52px; align-items: center;
+      margin-top: 20px;
+    }
+    .spinner {
+      width: 24px; height: 24px; border-radius: 50%;
+      border: 2.4px solid var(--hairline); border-top-color: var(--accent);
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .switch {
+      margin-top: 14px; text-align: center; font-size: 13px; font-weight: 500;
+      color: var(--tertiary);
+    }
+    .switch button {
+      border: 0; background: none; color: var(--accent); font: 700 13px Inter, sans-serif;
+      cursor: pointer;
+    }
+    .otp {
+      display: flex; gap: 6px; margin-top: 28px;
+    }
+    .otp input {
+      flex: 1 1 0; min-width: 0; height: 52px; text-align: center; border-radius: 12px;
+      border: 0.5px solid var(--hairline); background: var(--surface);
+      color: var(--text); font: 700 20px/1 Inter, sans-serif;
+      text-transform: uppercase; caret-color: var(--accent);
+    }
+    .otp input:focus { border-color: var(--accent); outline: 0; }
+    a.open-app { display: flex; align-items: center; justify-content: center; text-decoration: none; }
+    .done { text-align: center; padding-top: 48px; }
+    .done .check {
+      width: 56px; height: 56px; margin: 0 auto 16px; border-radius: 50%;
+      background: #1b3d2a; color: #34d399; font-size: 28px; line-height: 56px;
+    }
+    .done h1 { font-size: 22px; letter-spacing: -0.3px; }
+    @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="app"></div>
+
+  <script>
+  const SUPA = "https://eogwzrlfoercfwcfwlmv.supabase.co";
+  const ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVvZ3d6cmxmb2VyY2Z3Y2Z3bG12Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjgzODIsImV4cCI6MjA5OTk0NDM4Mn0.qr-nHnB9vb7BodP55XJ9-6Rwp__eOGCS6txhLiuWVZw";
+  const FN = SUPA + "/functions/v1/pair-tv";
+  const ANDROID_PKG = "com.spyou.watch_app";
+
+  const params = new URLSearchParams(location.search);
+  let code = (params.get("code") || "").trim().toUpperCase();
+  const nonce = params.get("nonce");
+  const trackersOnly = params.get("trackers") === "1";
+  const isAndroid = /Android/i.test(navigator.userAgent);
+
+  const ICON_MAIL = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>';
+  const ICON_LOCK = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+  const ICON_PERSON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.5"/><path d="M5 19c.8-3.2 3.5-5 7-5s6.2 1.8 7 5"/></svg>';
+
+  const app = document.getElementById("app");
+  let mode = "login"; // login | signup | forgot | done
+  let busy = false;
+  let error = "";
+  let okmsg = "";
+  let deviceName = null;
+  let triedApp = false;
+
+  function field(id, hint, icon, type) {
+    return '<label class="field">' + icon +
+      '<input id="' + id + '" type="' + type + '" autocomplete="' +
+      (type === "password" ? "current-password" : type === "email" ? "email" : "name") +
+      '" placeholder="' + hint + '" /></label>';
+  }
+
+  function pairQuery() {
+    var q = "code=" + encodeURIComponent(code);
+    if (nonce) q += "&nonce=" + encodeURIComponent(nonce);
+    if (trackersOnly) q += "&trackers=1";
+    return q;
+  }
+
+  // intent:// works from an http:// LAN URL; App Links (https → app) do not.
+  // No S.browser_fallback_url — that reloads this page in a loop when the
+  // app isn't installed. Mirror /open/: try, then stay on the web login.
+  function appHref() {
+    if (!code) return "#";
+    if (isAndroid) {
+      return "intent://pair?" + pairQuery() +
+        "#Intent;scheme=zangetsu;package=" + ANDROID_PKG + ";end";
+    }
+    return "zangetsu://pair?" + pairQuery();
+  }
+
+  function openApp() {
+    if (!code) return;
+    location.href = appHref();
+  }
+
+  function openAppButton() {
+    return '<a class="open-app" id="openAppBtn" href="' + appHref() + '">Open in Zangetsu</a>';
+  }
+
+  function render() {
+    if (trackersOnly && code) {
+      app.innerHTML =
+        "<h1>Connect a tracker</h1>" +
+        '<p class="sub">This QR is for sending AniList / MyAnimeList / Simkl from the app. On the TV, scan the “No app?” QR instead to log in with your tracker here.</p>';
+      if (isAndroid) {
+        app.innerHTML += openAppButton();
+        if (!triedApp) { triedApp = true; openApp(); }
+      }
+      return;
+    }
+    if (!code) {
+      app.innerHTML =
+        "<h1>Enter the TV code</h1>" +
+        '<p class="sub">Type the 8-character code shown on your TV.</p>' +
+        '<div class="otp" id="otp">' +
+        [0,1,2,3,4,5,6,7].map(function (i) {
+          return '<input maxlength="1" data-i="' + i + '" autocapitalize="characters" autocomplete="off" inputmode="text">';
+        }).join("") +
+        "</div>" +
+        '<p class="err" id="err"' + (error ? "" : " hidden") + ">" + escapeHtml(error) + "</p>";
+      bindOtp(document.getElementById("otp"));
+      return;
+    }
+    if (mode === "done") {
+      app.innerHTML =
+        '<div class="done"><div class="check">✓</div>' +
+        "<h1>Your TV is signed in</h1>" +
+        '<p class="sub">It should switch to your account in a moment. You can close this page.</p></div>';
+      return;
+    }
+
+    const isSignup = mode === "signup";
+    const isForgot = mode === "forgot";
+    const title = isForgot ? "Reset password" : isSignup ? "Create account" : "Welcome back";
+    const sub = isForgot
+      ? "Enter your account email and we’ll send a link to set a new password."
+      : isSignup
+        ? "Save your list and continue watching anywhere."
+        : "Sign in to sync your list across devices.";
+
+    let body = "<h1>" + title + "</h1><p class=\"sub\">" + sub + "</p>";
+    if (deviceName) body += '<p class="device">Pairing ' + escapeHtml(deviceName) + "</p>";
+    if (isAndroid && !isForgot) {
+      body += openAppButton();
+      body += '<div class="or">OR SIGN IN HERE</div>';
+    }
+    body += '<form id="form">';
+    if (isSignup) body += field("name", "Name", ICON_PERSON, "text");
+    body += field("email", "Email", ICON_MAIL, "email");
+    if (!isForgot) {
+      body += field("password", isSignup ? "Password (8+ characters)" : "Password", ICON_LOCK, "password");
+    }
+    if (!isSignup && !isForgot) {
+      body += '<button type="button" class="forgot" id="forgotBtn">Forgot password?</button>';
+    }
+    body += '<p class="err" id="err"' + (error ? "" : " hidden") + ">" + escapeHtml(error) + "</p>";
+    body += '<p class="okmsg" id="okmsg"' + (okmsg ? "" : " hidden") + ">" + escapeHtml(okmsg) + "</p>";
+    body += busy
+      ? '<div class="spin-wrap"><div class="spinner"></div></div>'
+      : '<button class="primary" type="submit">' +
+        (isForgot ? "Send link" : isSignup ? "Create account" : "Log in") +
+        "</button>";
+    body += "</form>";
+    if (isForgot) {
+      body += '<p class="switch">Remembered it? <button type="button" id="toLogin">Log in</button></p>';
+    } else if (isSignup) {
+      body += '<p class="switch">Already have an account? <button type="button" id="toLogin">Log in</button></p>';
+    } else {
+      body += '<p class="switch">Don\'t have an account? <button type="button" id="toSignup">Sign up</button></p>';
+    }
+    app.innerHTML = body;
+
+    const form = document.getElementById("form");
+    form.addEventListener("submit", onSubmit);
+    const toLogin = document.getElementById("toLogin");
+    const toSignup = document.getElementById("toSignup");
+    const forgotBtn = document.getElementById("forgotBtn");
+    if (toLogin) toLogin.addEventListener("click", function () { mode = "login"; error = ""; okmsg = ""; render(); });
+    if (toSignup) toSignup.addEventListener("click", function () { mode = "signup"; error = ""; okmsg = ""; render(); });
+    if (forgotBtn) forgotBtn.addEventListener("click", function () { mode = "forgot"; error = ""; okmsg = ""; render(); });
+    if (isAndroid && !isForgot && !triedApp) { triedApp = true; openApp(); }
+  }
+
+  function bindOtp(row) {
+    const boxes = [].slice.call(row.querySelectorAll("input"));
+    function read() { return boxes.map(function (b) { return (b.value || "").toUpperCase(); }).join(""); }
+    function write(s) {
+      s = s.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 8);
+      for (var i = 0; i < 8; i++) boxes[i].value = s[i] || "";
+      if (s.length === 8) acceptCode(s);
+      else boxes[Math.min(s.length, 7)].focus();
+    }
+    boxes.forEach(function (box, i) {
+      box.addEventListener("input", function () {
+        var v = (box.value || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+        if (v.length > 1) { write(read().slice(0, i) + v); return; }
+        box.value = v;
+        if (v && i < 7) boxes[i + 1].focus();
+        if (read().length === 8) acceptCode(read());
+      });
+      box.addEventListener("keydown", function (e) {
+        if (e.key === "Backspace" && !box.value && i > 0) {
+          boxes[i - 1].value = "";
+          boxes[i - 1].focus();
+        }
+      });
+      box.addEventListener("paste", function (e) {
+        e.preventDefault();
+        write((e.clipboardData || window.clipboardData).getData("text") || "");
+      });
+    });
+    boxes[0].focus();
+  }
+
+  function acceptCode(s) {
+    code = s;
+    error = "";
+    var next = new URL(location.href);
+    next.searchParams.set("code", code);
+    history.replaceState({}, "", next);
+    render();
+    lookup();
+  }
+
+  function escapeHtml(s) {
+    return String(s || "").replace(/[&<>"']/g, function (c) {
+      return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c];
+    });
+  }
+
+  function headers(token) {
+    const h = { apikey: ANON, "content-type": "application/json" };
+    if (token) h.authorization = "Bearer " + token;
+    else h.authorization = "Bearer " + ANON;
+    return h;
+  }
+
+  async function callFn(body, token) {
+    const r = await fetch(FN, { method: "POST", headers: headers(token), body: JSON.stringify(body) });
+    return r.json();
+  }
+
+  async function lookup() {
+    if (!code || trackersOnly) return;
+    try {
+      const res = await callFn({ action: "info", code: code });
+      if (res && res.ok && res.deviceName) {
+        deviceName = res.deviceName;
+        render();
+      }
+    } catch (_) { /* still allow login */ }
+  }
+
+  async function onSubmit(e) {
+    e.preventDefault();
+    if (busy) return;
+    error = ""; okmsg = "";
+    const email = (document.getElementById("email").value || "").trim();
+    const passwordEl = document.getElementById("password");
+    const password = passwordEl ? passwordEl.value : "";
+    const nameEl = document.getElementById("name");
+    const name = nameEl ? nameEl.value.trim() : "";
+
+    if (!email) { error = "Enter your email."; render(); return; }
+    if (mode !== "forgot" && !password) { error = "Enter your password."; render(); return; }
+    if (mode === "signup" && password.length < 8) {
+      error = "Password must be at least 8 characters"; render(); return;
+    }
+
+    busy = true; render();
+    try {
+      if (mode === "forgot") {
+        const r = await fetch(SUPA + "/auth/v1/recover", {
+          method: "POST", headers: headers(),
+          body: JSON.stringify({ email: email }),
+        });
+        busy = false;
+        if (!r.ok) {
+          const j = await r.json().catch(function () { return {}; });
+          error = j.msg || j.error_description || "Could not send the reset email";
+        } else {
+          okmsg = "Reset link sent — check your email (and spam).";
+          mode = "login";
+        }
+        render();
+        return;
+      }
+
+      let token = null;
+      if (mode === "signup") {
+        const r = await fetch(SUPA + "/auth/v1/signup", {
+          method: "POST", headers: headers(),
+          body: JSON.stringify({ email: email, password: password, data: { name: name } }),
+        });
+        const j = await r.json();
+        if (!r.ok) throw new Error(j.msg || j.error_description || "Sign up failed");
+        token = j.access_token;
+        if (!token) throw new Error("Check your email to confirm the account, then log in.");
+        if (name) {
+          fetch(SUPA + "/rest/v1/profiles", {
+            method: "POST",
+            headers: Object.assign(headers(token), { Prefer: "resolution=merge-duplicates" }),
+            body: JSON.stringify({ id: j.user && j.user.id, display_name: name }),
+          }).catch(function () {});
+        }
+      } else {
+        const r = await fetch(SUPA + "/auth/v1/token?grant_type=password", {
+          method: "POST", headers: headers(),
+          body: JSON.stringify({ email: email, password: password }),
+        });
+        const j = await r.json();
+        if (!r.ok) throw new Error("Invalid email or password");
+        token = j.access_token;
+      }
+
+      const res = await callFn({ action: "approve", code: code }, token);
+      busy = false;
+      if (!res || res.ok !== true) {
+        error = res && res.error === "expired"
+          ? "That code wasn't found — it may have expired."
+          : "Approval failed. Try again.";
+        render();
+        return;
+      }
+      mode = "done";
+      render();
+    } catch (err) {
+      busy = false;
+      error = err && err.message ? err.message : "Authentication failed";
+      render();
+    }
+  }
+
+  render();
+  lookup();
+  </script>
+</body>
+</html>
