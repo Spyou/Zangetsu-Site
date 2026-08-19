@@ -6,6 +6,24 @@
   <title>Open in Zangetsu</title>
   <meta name="robots" content="noindex" />
   <meta name="theme-color" content="#08070b" />
+  <!-- Link preview for shared titles. Static by necessity: the share URL
+       carries the source/title but no artwork, and a crawler never runs the
+       page's JS, so there's nothing to build a per-title card from. A shared
+       link used to render as bare text; this at least makes it read as an app
+       link. The title itself is in the shared message above the link. -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Zangetsu" />
+  <meta property="og:url" content="https://zangetsu.online/open/" />
+  <meta property="og:title" content="Watch on Zangetsu" />
+  <meta property="og:description" content="Open this title in Zangetsu — free anime, movies &amp; TV on Android phone and TV." />
+  <meta property="og:image" content="https://zangetsu.online/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Zangetsu — free anime, movies and TV on Android phone and TV" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Watch on Zangetsu" />
+  <meta name="twitter:description" content="Open this title in Zangetsu — free anime, movies &amp; TV on Android phone and TV." />
+  <meta name="twitter:image" content="https://zangetsu.online/og.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <style>
