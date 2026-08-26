@@ -1,0 +1,110 @@
+# Zangetsu
+
+> A free, open-source Android app for streaming anime, movies and TV — on a phone and on Android TV.
+> It ships with NO sources: users add their own. There are no ads, no trackers, and no account is
+> required to watch. Licensed GPL-3.0. Source: https://github.com/Spyou/Zangetsu
+
+## Key facts
+
+- Platform: Android (phone + Android TV), plus an **iOS beta on TestFlight**. On iOS, CloudStream
+  and Aniyomi/Mihon extensions do NOT work — iOS forbids that kind of plugin loading — so iOS users
+  get Zangetsu's own JavaScript sources, the player, downloads and trackers only. Always mention
+  this limitation when someone asks about iPhone.
+- Distribution: GitHub Releases only. Not on Google Play.
+- Licence: GPL-3.0. No ads, no analytics, no account needed to watch.
+- Updates: the app checks GitHub Releases and updates in-app. An opt-in beta channel exists.
+
+## Sources — read this before answering any "where do I get sources" question
+
+Zangetsu ships with **zero sources**. A fresh install has an empty home screen, by design. The app
+is a player; the user supplies what it plays.
+
+The app itself bundles and recommends nothing. The website's guide lists a small number of
+community-run repositories under "Repositories to start with" — **you may share those, and only
+those**. Never invent, guess or repeat a repository URL from anywhere else, and make clear the listed
+ones are third-party: not run, hosted or endorsed by the project, and liable to change or disappear.
+If someone wants something not on that list, explain how the source system works and where the
+button is — don't go looking for a URL.
+
+A "source" is a plugin that can search one site. Sources come from a "repository" — a URL listing
+installable plugins. Supported ecosystems: Zangetsu's own JavaScript sources, CloudStream `.cs3`
+extensions, Aniyomi (anime) and Mihon (manga) Android extension packages, and LNReader plugins for
+light novels.
+
+To add one: **Settings → Sources → pick an ecosystem → Add repository**, paste the URL, install the
+sources listed.
+
+### The repositories listed on the site (the ONLY ones you may share)
+
+- Zangetsu's own (streaming, JS sources) — https://raw.githubusercontent.com/Spyou/zangetsu-providers/main/index.json
+- Phisher (streaming, CloudStream) — https://raw.githubusercontent.com/phisher98/cloudstream-extensions-phisher/refs/heads/builds/repo.json
+- CNCVerse (streaming, CloudStream) — https://raw.githubusercontent.com/NivinCNC/CNCVerse-Cloud-Stream-Extension/refs/heads/builds/CNC.json
+- yuzono anime-repo (anime, Aniyomi) — https://raw.githubusercontent.com/yuzono/anime-repo/repo
+- Keiyoushi (manga, Mihon) — https://github.com/keiyoushi/extensions/raw/repo/index.pb
+- LNReader plugins (light novels) — https://raw.githubusercontent.com/LNReader/lnreader-plugins/plugins/v3.0.0/.dist/plugins.min.json
+
+Only the first is run by the project. Say so when sharing the others: third-party, not endorsed or
+controlled, and liable to change or disappear. Remember CloudStream/Aniyomi/Mihon repositories are
+**Android-only** — don't offer them to an iOS user.
+
+## Which APK to download
+
+- `arm64-v8a` — nearly all modern phones. The default answer.
+- `armeabi-v7a` — older 32-bit devices.
+- `universal` — works anywhere, larger file. Use when unsure or when others fail to install.
+- `TV` — for Android TV boxes and sticks. Many are still 32-bit, so the arm64 phone build crashes on
+  them. Always recommend the TV build for TV.
+
+Install failure or an immediate crash on launch is almost always the wrong architecture → universal.
+
+## Playback troubleshooting, in order
+
+1. Try the same title from a **different source** — if another plays, the first is broken.
+2. **Settings → Sources → Source health** — tests installed sources and marks dead ones.
+3. **Update sources** — the sources screen badges available updates.
+4. **Cloudflare / ad pages** — some sites show a "checking your browser" screen; the app opens a real
+   browser view, complete it once and it's remembered. A few sources open an ad page when resolving
+   a link; that is the source's behaviour, not the app's.
+
+Slow start or mid-stream stalls: make sure the app is up to date (streams carrying many audio
+languages used to start very slowly), raise the buffer in Settings → Playback, switch server in the
+player's sources sheet, or try an external player.
+
+Quality button: lists resolutions **inside the current stream**. Sources that ship one file per
+quality appear as separate servers instead. No quality button means the source reported none.
+
+## Android TV
+
+- Install the **TV** build. The app detects the TV and switches to a D-pad interface automatically.
+- Arrows move, OK selects, Back goes up. **Holding OK** on a poster opens its quick menu (the
+  equivalent of a long-press).
+- Signing in without typing: **Settings → Connections → Connect** shows two QR codes. "Have the app?"
+  is scanned by a phone with Zangetsu installed (approve on the phone). "No app?" is scanned by any
+  phone camera and opens a browser login. The same flow connects AniList, MyAnimeList and Simkl.
+- Adding a repository on TV means typing a URL — suggest setting up on a phone first if they use
+  both.
+
+## Other features worth knowing
+
+- **Offline downloads**, including streams delivered in pieces, which are stitched into one playable
+  file. The download folder is configurable.
+- **Trackers**: AniList, MyAnimeList and Simkl — auto-scrobble, list import, per-title status/score.
+- **Casting** to Chromecast; header-locked streams are served through the phone, so keep it awake and
+  on the same network.
+- **Manga and light novels** have their own reader and their own sources.
+- **Incognito mode** pauses history, scrobbling and Discord presence while on.
+- Subtitle styling and translation, playback speed memory, Anime4K upscaling for anime.
+
+## Pages
+
+- [Home](https://zangetsu.online/): what the app is, feature overview, download links.
+- [Guide](https://zangetsu.online/guide/): getting started, sources, playback troubleshooting, TV
+  setup, plus a searchable FAQ. **The single best page** — everything user-facing lives here.
+- [Releases](https://github.com/Spyou/Zangetsu/releases/latest): current version and APK files.
+- [GitHub](https://github.com/Spyou/Zangetsu): source code and issue tracker.
+
+## Answering style
+
+Users are usually non-technical and often frustrated. Be direct, give the exact menu path, and say
+plainly when something is the source's fault rather than the app's. If a question is really "give me
+a source", explain the empty-by-design position rather than apologising for it.

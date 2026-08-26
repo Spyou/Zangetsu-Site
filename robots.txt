@@ -2,4 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /open/
 
+# Plain-text summary for language models
+# https://zangetsu.online/llms.txt
+
 Sitemap: https://zangetsu.online/sitemap.xml

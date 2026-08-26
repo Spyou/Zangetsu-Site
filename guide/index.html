@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Guide — Zangetsu</title>
+  <meta name="description" content="How Zangetsu works: installing, adding sources, fixing playback problems, and setting it up on Android TV." />
+  <link rel="canonical" href="https://zangetsu.online/guide/" />
+  <meta name="theme-color" content="#08070b" />
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Zangetsu" />
+  <meta property="og:url" content="https://zangetsu.online/guide/" />
+  <meta property="og:title" content="Zangetsu — Guide" />
+  <meta property="og:description" content="Installing, adding sources, fixing playback, and Android TV setup." />
+  <meta property="og:image" content="https://zangetsu.online/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --void:#08070b; --panel:#100e15; --panel-2:#15121d; --edge:#241f2e;
+      --blood:#ff2d4f; --moon:#f3f1f7; --ash:#857f92;
+      --display:"Archivo",sans-serif; --body:"Inter",sans-serif; --mono:"Space Mono",monospace;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--void);color:var(--moon);font-family:var(--body);
+         line-height:1.65;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    ::selection{background:var(--blood);color:#fff}
+    :focus-visible{outline:2px solid var(--blood);outline-offset:3px}
+    .wrap{width:min(1140px,92vw);margin:0 auto}
+
+    .nav{position:sticky;top:0;z-index:30;backdrop-filter:blur(14px);
+         background:rgba(8,7,11,.72);border-bottom:1px solid var(--edge)}
+    .nav .wrap{width:min(1140px,90vw);display:flex;align-items:center;
+               justify-content:space-between;height:64px}
+    .logo{font-family:var(--display);font-weight:900;font-size:22px;letter-spacing:3px}
+    .logo b{color:var(--blood)}
+    .nav-links{display:flex;gap:26px;align-items:center}
+    .nav-links a{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;
+                 color:var(--ash);transition:color .2s}
+    .nav-links a:hover{color:var(--moon)}
+    .nav-cta{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:1px;
+             color:var(--blood);border:1px solid var(--blood);padding:8px 16px;border-radius:8px}
+    .nav-cta:hover{background:var(--blood);color:#fff}
+    @media(max-width:760px){
+      .nav-links{gap:14px}
+      .nav-links a{font-size:12px;letter-spacing:1px}
+      .nav-cta{padding:7px 12px}
+    }
+
+    /* ── Phones ──────────────────────────────────────────── */
+    @media(max-width:620px){
+      .wrap{width:min(880px,92vw)}
+      header.top{padding:38px 0 22px}
+      .sub{font-size:15.5px}
+      .search{margin:22px 0 6px}
+      .search input{font-size:16px;padding:13px 14px 13px 42px}  /* 16px: iOS won't zoom on focus */
+      section.doc{padding:34px 0 6px}
+      section.doc > h2{font-size:23px}
+      section.doc h3{font-size:15.5px;margin:22px 0 6px}
+      section.doc p,section.doc ul,section.doc ol{font-size:14.5px}
+      section.doc ul,section.doc ol{margin-left:18px}
+      details.qa summary{font-size:14.5px;padding:13px 14px}
+      details.qa .a{font-size:14px;padding:0 14px 14px}
+      .toc{gap:7px}
+      .toc a{padding:7px 13px;font-size:13px}
+      footer{flex-direction:column;gap:10px;margin-top:44px}
+    }
+
+    header.top{padding:64px 0 30px}
+    h1{font-family:var(--display);font-weight:900;font-size:clamp(34px,6vw,52px);
+       letter-spacing:-1px;line-height:1.05}
+    .sub{color:var(--ash);margin-top:12px;font-size:17px;max-width:60ch}
+
+    /* search + faq */
+    .search{margin:30px 0 8px;position:relative}
+    .search input{width:100%;background:var(--panel);border:1px solid var(--edge);
+                  border-radius:12px;padding:15px 16px 15px 44px;color:var(--moon);
+                  font-family:var(--body);font-size:15px}
+    .search input::placeholder{color:var(--ash)}
+    .search svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);
+                width:17px;height:17px;stroke:var(--ash);fill:none;stroke-width:2}
+    .hint{color:var(--ash);font-size:13px;margin:10px 2px 22px}
+
+    details.qa{border:1px solid var(--edge);border-radius:12px;background:var(--panel);
+               margin-bottom:9px;overflow:hidden}
+    details.qa summary{cursor:pointer;list-style:none;padding:14px 16px;
+                       font-weight:600;font-size:15px;display:flex;
+                       justify-content:space-between;gap:14px;align-items:flex-start}
+    details.qa summary::-webkit-details-marker{display:none}
+    details.qa summary::after{content:"+";color:var(--blood);font-family:var(--mono);
+                              font-size:17px;line-height:1.3;flex:0 0 auto}
+    details.qa[open] summary::after{content:"\2212"}
+    details.qa .a{padding:0 16px 16px;color:var(--ash);font-size:14.5px}
+    details.qa .a a{color:var(--blood)}
+    .noresult{color:var(--ash);font-size:14px;padding:12px 2px;display:none}
+
+    section.doc{padding:44px 0 8px;scroll-margin-top:76px}
+    section.doc > h2{font-family:var(--display);font-weight:900;font-size:27px;
+                     letter-spacing:-.4px;padding-bottom:10px;border-bottom:1px solid var(--edge)}
+    section.doc h3{font-size:16.5px;margin:26px 0 7px;font-weight:600}
+    section.doc p{color:var(--ash);font-size:15px;margin-bottom:11px}
+    section.doc ul,section.doc ol{color:var(--ash);font-size:15px;margin:0 0 13px 20px}
+    section.doc li{margin-bottom:7px}
+    section.doc a{color:var(--blood)}
+    strong{color:var(--moon);font-weight:600}
+    code{font-family:var(--mono);font-size:13px;background:var(--panel-2);
+         border:1px solid var(--edge);border-radius:5px;padding:1.5px 6px;color:var(--moon)}
+    .path{font-family:var(--mono);font-size:13.5px;color:var(--moon);
+          background:var(--panel-2);border:1px solid var(--edge);border-left:2px solid var(--blood);
+          border-radius:0 8px 8px 0;padding:10px 13px;margin:0 0 14px;
+          overflow-wrap:anywhere}
+    code{overflow-wrap:anywhere}
+    .note{border:1px solid var(--edge);border-left:2px solid var(--blood);background:var(--panel);
+          border-radius:0 10px 10px 0;padding:13px 15px;margin:16px 0;color:var(--ash);font-size:14.5px}
+    .note b{color:var(--moon)}
+
+    .repo{border:1px solid var(--edge);background:var(--panel);border-radius:12px;
+          padding:14px 15px;margin:0 0 10px}
+    .repo .r-name{font-weight:600;font-size:15px}
+    .ours{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.08em;
+          text-transform:uppercase;color:var(--blood);border:1px solid var(--blood);
+          border-radius:999px;padding:2px 7px;margin-left:7px;vertical-align:2px}
+    .repo .r-for{color:var(--ash);font-size:13px;margin:2px 0 9px}
+    .repo .r-url{display:flex;gap:9px;align-items:center}
+    .repo input{flex:1;min-width:0;font-family:var(--mono);font-size:12.5px;
+                background:var(--panel-2);border:1px solid var(--edge);border-radius:8px;
+                padding:9px 11px;color:var(--moon)}
+    .repo button{flex:0 0 auto;font-family:var(--mono);font-size:12px;font-weight:700;
+                 background:none;color:var(--blood);border:1px solid var(--blood);
+                 border-radius:8px;padding:9px 13px;cursor:pointer}
+    .repo button:hover{background:var(--blood);color:#fff}
+    @media(max-width:620px){.repo .r-url{flex-direction:column;align-items:stretch}
+                            .repo button{width:100%}}
+
+
+    /* ── entry cards ─────────────────────────────────────── */
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(214px,1fr));gap:13px;
+           margin:28px 0 4px}
+    .card{border:1px solid var(--edge);background:var(--panel);border-radius:16px;padding:18px 17px;
+          display:block;transition:border-color .18s,transform .18s,background .18s}
+    .card:hover{border-color:var(--blood);transform:translateY(-2px);background:var(--panel-2)}
+    .card .n{font-family:var(--mono);font-size:11px;color:var(--blood);letter-spacing:.1em}
+    .card h3{font-family:var(--display);font-size:17.5px;font-weight:700;margin:8px 0 5px;
+             letter-spacing:-.2px}
+    .card p{color:var(--ash);font-size:13.5px;line-height:1.55;margin:0}
+
+    /* ── two-column: sticky contents + body ──────────────── */
+    .cols{display:grid;grid-template-columns:196px 1fr;gap:50px;align-items:start;margin-top:24px}
+    .toc{position:sticky;top:86px}
+    .toc .t{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+            color:var(--ash);margin-bottom:11px}
+    .toc a{display:block;font-size:14px;color:var(--ash);padding:7px 0 7px 13px;
+           border-left:2px solid var(--edge);transition:color .18s,border-color .18s}
+    .toc a:hover{color:var(--moon)}
+    .toc a.on{color:var(--moon);border-left-color:var(--blood);font-weight:600}
+    @media(max-width:900px){
+      .cols{grid-template-columns:1fr;gap:0}
+      .toc{position:sticky;top:62px;z-index:20;margin:0 -4vw 6px;padding:10px 4vw;
+           background:rgba(8,7,11,.94);backdrop-filter:blur(10px);
+           border-bottom:1px solid var(--edge);display:flex;gap:8px;overflow-x:auto;
+           scrollbar-width:none}
+      .toc::-webkit-scrollbar{display:none}
+      .toc .t{display:none}
+      .toc a{flex:0 0 auto;border:1px solid var(--edge);border-radius:999px;padding:7px 13px;
+             font-size:13px;white-space:nowrap}
+      .toc a.on{border-color:var(--blood)}
+    }
+
+    section.doc > h2{display:flex;align-items:center;gap:12px;border-bottom:0;padding-bottom:0}
+    section.doc > h2 .num{font-family:var(--mono);font-size:12px;color:var(--blood);
+                          border:1px solid var(--blood);border-radius:8px;padding:4px 9px;
+                          font-weight:700;letter-spacing:.06em}
+    .rule{height:1px;background:var(--edge);margin:13px 0 20px}
+    section.doc p,section.doc ul,.note,.path,.repo{max-width:68ch}
+
+    /* ── numbered steps ──────────────────────────────────── */
+    ol.steps{list-style:none;margin:6px 0 16px;padding:0;counter-reset:s;max-width:68ch}
+    ol.steps > li{counter-increment:s;position:relative;padding:0 0 20px 42px;
+                  border-left:1px solid var(--edge);margin-left:14px}
+    ol.steps > li:last-child{border-left-color:transparent;padding-bottom:2px}
+    ol.steps > li::before{content:counter(s);position:absolute;left:-15px;top:-3px;width:29px;
+                          height:29px;border-radius:50%;background:var(--panel-2);
+                          border:1px solid var(--edge);color:var(--blood);font-family:var(--mono);
+                          font-size:12.5px;font-weight:700;display:grid;place-items:center}
+    ol.steps h4{font-size:15px;font-weight:600;margin:2px 0 5px}
+    ol.steps p{margin-bottom:0;font-size:14.5px;color:var(--ash)}
+
+    /* ── back to top ─────────────────────────────────────── */
+    .toTop{position:fixed;right:20px;bottom:20px;z-index:50;width:44px;height:44px;border-radius:50%;
+           background:var(--panel);border:1px solid var(--edge);color:var(--moon);display:grid;
+           place-items:center;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .22s;
+           font-size:17px}
+    .toTop.show{opacity:1;pointer-events:auto}
+    .toTop:hover{border-color:var(--blood);color:var(--blood)}
+    /* The browser's own search clear button is a system glyph we can't style —
+       it looks different on every platform. Hide it and use our own. */
+    .search input::-webkit-search-cancel-button,
+    .search input::-webkit-search-decoration{-webkit-appearance:none;appearance:none;display:none}
+    .search input[type=search]{appearance:none}
+
+    .kbd{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-family:var(--mono);
+         font-size:11px;color:var(--ash);border:1px solid var(--edge);border-radius:6px;padding:3px 7px;
+         pointer-events:none}
+    .clear{position:absolute;right:9px;top:50%;transform:translateY(-50%);width:30px;height:30px;
+           display:none;place-items:center;background:none;border:0;border-radius:50%;
+           color:var(--ash);cursor:pointer}
+    .clear:hover{color:var(--moon);background:var(--panel-2)}
+    .search.filled .kbd{display:none}
+    .search.filled .clear{display:grid}
+    @media(max-width:620px){.kbd{display:none}}
+
+
+
+    footer{border-top:1px solid var(--edge);margin-top:60px;padding:26px 0 46px;
+           color:var(--ash);font-size:13.5px;display:flex;gap:20px;flex-wrap:wrap;
+           justify-content:space-between}
+    footer a{color:var(--ash)} footer a:hover{color:var(--moon)}
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="logo" href="/">ZANGE<b>&dagger;</b>SU</a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a class="nav-cta" href="https://github.com/Spyou/Zangetsu/releases/latest">Get the app</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <header class="top">
+    <div class="kicker">Guide</div>
+    <h1>Everything you<br />need to know</h1>
+    <p class="sub">Installing it, adding sources, fixing playback when it sulks, and setting it up
+    on a TV. Search, or pick a section.</p>
+
+    <div class="search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search — &ldquo;no sources&rdquo;, &ldquo;buffering&rdquo;, &ldquo;TV login&rdquo;&hellip;"
+             autocomplete="off" aria-label="Search the guide" />
+      <span class="kbd">/</span>
+      <button class="clear" id="clear" type="button" aria-label="Clear search">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor"
+             stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+
+    <div class="cards">
+      <a class="card" href="#start"><div class="n">01</div><h3>Getting started</h3>
+        <p>Which file to download, is it safe, updates, iPhone.</p></a>
+      <a class="card" href="#sources"><div class="n">02</div><h3>Sources</h3>
+        <p>Why it starts empty, what a repository is, which to add.</p></a>
+      <a class="card" href="#watch"><div class="n">03</div><h3>Watching</h3>
+        <p>Finding titles, picking a server, saving for offline.</p></a>
+      <a class="card" href="#playback"><div class="n">04</div><h3>Won&rsquo;t play?</h3>
+        <p>The checklist — dead sources, Cloudflare, buffering.</p></a>
+      <a class="card" href="#tv"><div class="n">05</div><h3>On your TV</h3>
+        <p>Android TV, the D-pad, signing in without typing.</p></a>
+    </div>
+  </header>
+
+  <div class="cols">
+    <aside class="toc" id="toc">
+      <div class="t">Contents</div>
+      <a href="#faq">Common questions</a>
+      <a href="#start">Getting started</a>
+      <a href="#sources">Sources</a>
+      <a href="#watch">Watching</a>
+      <a href="#playback">Won&rsquo;t play?</a>
+      <a href="#tv">On your TV</a>
+    </aside>
+
+    <div class="body">
+      <div id="faq" style="scroll-margin-top:88px">
+        <p class="hint" id="hint">The dozen we&rsquo;re asked most.</p>
+        <div id="faqlist">
+
+      <details class="qa"><summary>The app is empty — where are the sources?</summary>
+        <div class="a">Zangetsu ships with <strong>no sources at all</strong>, on purpose. It's a
+        player, not a library — you choose what to add. Open <strong>Settings → Sources</strong>,
+        pick an ecosystem, and add a repository. We don't host, bundle, recommend or link to any
+        source, and support can't hand you one. See <a href="#sources">Sources</a>.</div></details>
+
+      <details class="qa"><summary>Which APK should I download?</summary>
+        <div class="a">Nearly every modern phone wants <strong>arm64-v8a</strong>. If it won't
+        install, use the <strong>universal</strong> build. For Android TV use the
+        <strong>TV/universal</strong> build — many TV boxes are still 32-bit and the arm64-only
+        file will crash on them. See <a href="#start">Getting started</a>.</div></details>
+
+      <details class="qa"><summary>Nothing plays / it just buffers forever</summary>
+        <div class="a">Usually the source, not the app. Try a different source for the same title,
+        then run <strong>Settings → Sources → Source health</strong>. If a site needs a Cloudflare
+        check, the app opens a browser window — finish it once and it's remembered. See
+        <a href="#playback">When something won't play</a>.</div></details>
+
+      <details class="qa"><summary>Is it safe? Is it open source?</summary>
+        <div class="a">Yes — the whole app is open source under <strong>GPL-3.0</strong> and every
+        release is built and published on
+        <a href="https://github.com/Spyou/Zangetsu">GitHub</a>. There are no ads, no trackers and
+        no account required to watch.</div></details>
+
+      <details class="qa"><summary>Is there an iPhone version?</summary>
+        <div class="a">Yes — a beta on <strong>TestFlight</strong>. One catch:
+        <strong>CloudStream and Aniyomi/Mihon extensions don't work on iOS</strong>, because iOS
+        doesn't allow that kind of plugin loading. You get Zangetsu's own sources, the player,
+        downloads and trackers. See <a href="#start">Getting started</a>.</div></details>
+
+      <details class="qa"><summary>How do I sign in to AniList / MAL / Simkl on my TV?</summary>
+        <div class="a">Typing on a TV is miserable, so you don't. Open
+        <strong>Settings → Connections → Connect</strong> and scan the QR with your phone —
+        either with the Zangetsu app installed, or straight in your phone's browser if not.
+        See <a href="#tv">On your TV</a>.</div></details>
+
+      <details class="qa"><summary>Does it download for offline?</summary>
+        <div class="a">Yes. Tap the download icon on an episode. Streams that arrive in pieces are
+        stitched into a single playable file, so downloads behave like normal videos. You can also
+        pick where they're saved.</div></details>
+
+      <details class="qa"><summary>How do I update?</summary>
+        <div class="a">The app checks GitHub Releases and offers the update in-app. There's an
+        opt-in <strong>beta channel</strong> in settings if you want pre-releases. You can always
+        just install a newer APK over the top.</div></details>
+
+      <details class="qa"><summary>Can I watch on a real TV screen?</summary>
+        <div class="a">Three ways: install it on an <strong>Android TV</strong> directly, cast to a
+        <strong>Chromecast</strong>, or use an external player. The TV build has its own D-pad
+        interface — see <a href="#tv">On your TV</a>.</div></details>
+
+      <details class="qa"><summary>Manga and novels too?</summary>
+        <div class="a">Yes — there's a reader for both, with its own sources. Same rule: nothing
+        ships bundled, you add what you want.</div></details>
+
+      <details class="qa"><summary>Does it track what I watch?</summary>
+        <div class="a">Only for you. Progress syncs to your own account if you sign in, and to
+        AniList/MAL/Simkl if you connect them. <strong>Incognito mode</strong> pauses history,
+        scrobbling and Discord presence while it's on.</div></details>
+
+      <details class="qa"><summary>Why does a browser window open when I press play?</summary>
+        <div class="a">Some sites sit behind a Cloudflare check, and a few show an ad page. The app
+        opens a real browser view so the check can complete — after that it's remembered. If a
+        source does this every single time, it's a bad source; try another.</div></details>
+            </div>
+        <p class="noresult" id="noresult">Nothing matched. Try fewer words, or read the sections below.</p>
+      </div>
+
+  <!-- ─────────────────────────────────────────────────────── -->
+  <section class="doc" id="start">
+    <h2><span class="num">01</span> Getting started</h2><div class="rule"></div>
+
+    <h3>Which file do I want?</h3>
+    <p>Releases carry several APKs because one file for every device would be needlessly large:</p>
+    <ul>
+      <li><strong>arm64-v8a</strong> — nearly every phone made in the last several years. Start here.</li>
+      <li><strong>armeabi-v7a</strong> — older 32-bit devices.</li>
+      <li><strong>universal</strong> — works everywhere, bigger file. Use it if you're unsure or the
+      others refuse to install.</li>
+      <li><strong>TV</strong> — for Android TV boxes and sticks. Plenty are still 32-bit, so use
+      this rather than the arm64 phone build.</li>
+    </ul>
+    <div class="note"><b>Installing fails or the app closes on launch?</b> You almost certainly have
+    the wrong architecture. Install the universal build instead.</div>
+
+    <h3>Is it safe?</h3>
+    <p>The app is open source under GPL-3.0 and every release is published on GitHub, so anyone can
+    read the code or build it themselves. No ads, no analytics, no account needed to watch. Android
+    will warn about installing outside the Play Store — that warning is about the install method,
+    not this app in particular.</p>
+
+    <h3>Updating</h3>
+    <p>Zangetsu checks GitHub Releases and offers new versions inside the app. There's an opt-in
+    <strong>beta channel</strong> in settings for pre-releases. Installing a newer APK over the top
+    also works and keeps your data.</p>
+
+    <h3>iPhone and iPad</h3>
+    <p>There's an iOS build on <strong>TestFlight</strong>. It's a beta, and one limitation is worth
+    knowing before you install it: <strong>CloudStream and Aniyomi / Mihon extensions are
+    Android-only</strong>. They rely on Android's plugin loading, which iOS doesn't allow. On iOS you
+    get Zangetsu's own JavaScript sources and the built-in player, not the full source ecosystem.</p>
+    <p>So if a guide here mentions a CloudStream or Aniyomi repository, that part is for Android.
+    Everything else — the player, downloads, trackers, your list — works the same.</p>
+    <h3>First run</h3>
+    <p>Opening the app the first time walks you through a short setup. There's nothing to sign up
+    for — an account is optional and only exists to sync your list across devices. When it finishes
+    you land on an empty home screen, because no sources are installed yet. That's the next step.</p>
+  </section>
+
+
+  <!-- ─────────────────────────────────────────────────────── -->
+  <section class="doc" id="sources">
+    <h2><span class="num">02</span> Sources</h2><div class="rule"></div>
+
+    <p>This is the part that confuses people most, so plainly:
+    <strong>Zangetsu ships with nothing.</strong> Fresh install, no sources, empty home screen.
+    That's deliberate.</p>
+
+    <div class="note">We don't host, bundle, recommend or link to any source — not in the app, not
+    on this site, and not in support. Zangetsu is a <b>player</b>. What you point it at is your
+    decision and your responsibility.</div>
+
+    <h3>What a "source" actually is</h3>
+    <p>A source is a small plugin that knows how to search one website and find video for a title.
+    Sources come from <strong>repositories</strong> — a URL that lists plugins the app can install.
+    Add a repository, install sources from it, and the app can then search them.</p>
+
+    <h3>The ecosystems</h3>
+    <p>Zangetsu understands several plugin formats, so extensions written for other apps work here
+    too:</p>
+    <ul>
+      <li><strong>Zangetsu</strong> — the app's own lightweight JavaScript sources.</li>
+      <li><strong>CloudStream</strong> — <code>.cs3</code> extensions.</li>
+      <li><strong>Aniyomi / Mihon</strong> — installed as Android extension packages. Aniyomi
+      covers anime, Mihon covers manga.</li>
+      <li><strong>LNReader</strong> — plugins for light novels.</li>
+    </ul>
+
+    <h3>Adding one</h3>
+    <div class="path">Settings → Sources → pick an ecosystem → Add repository</div>
+    <p>Paste the repository URL, let it load, then install the sources you want. They show up in
+    the source switcher at the top of the home screen. Installed sources can be updated from the
+    same screen when the author publishes a new version.</p>
+
+    <h3>Repositories to start with</h3>
+    <p>These are community-run repositories that people commonly use. They are
+    <strong>not ours</strong> — we don't run, host, endorse or control them, and any of them can
+    change or disappear without notice. Copy the URL and paste it into Add repository.</p>
+
+    <div class="repo">
+      <div class="r-name">Zangetsu providers <span class="ours">ours</span></div>
+      <div class="r-for">Streaming · the app's own JavaScript sources</div>
+      <div class="r-url">
+        <input readonly value="https://raw.githubusercontent.com/Spyou/zangetsu-providers/main/index.json" aria-label="Zangetsu providers repository URL" />
+        <button type="button" data-copy>Copy</button>
+      </div>
+    </div>
+    <div class="repo">
+      <div class="r-name">Phisher extensions</div>
+      <div class="r-for">Streaming · CloudStream</div>
+      <div class="r-url">
+        <input readonly value="https://raw.githubusercontent.com/phisher98/cloudstream-extensions-phisher/refs/heads/builds/repo.json" aria-label="Phisher extensions repository URL" />
+        <button type="button" data-copy>Copy</button>
+      </div>
+    </div>
+    <div class="repo">
+      <div class="r-name">CNCVerse</div>
+      <div class="r-for">Streaming · CloudStream</div>
+      <div class="r-url">
+        <input readonly value="https://raw.githubusercontent.com/NivinCNC/CNCVerse-Cloud-Stream-Extension/refs/heads/builds/CNC.json" aria-label="CNCVerse repository URL" />
+        <button type="button" data-copy>Copy</button>
+      </div>
+    </div>
+    <div class="repo">
+      <div class="r-name">yuzono anime-repo</div>
+      <div class="r-for">Anime · Aniyomi</div>
+      <div class="r-url">
+        <input readonly value="https://raw.githubusercontent.com/yuzono/anime-repo/repo" aria-label="yuzono anime-repo repository URL" />
+        <button type="button" data-copy>Copy</button>
+      </div>
+    </div>
+    <div class="repo">
+      <div class="r-name">Keiyoushi extensions</div>
+      <div class="r-for">Manga · Mihon</div>
+      <div class="r-url">
+        <input readonly value="https://github.com/keiyoushi/extensions/raw/repo/index.pb" aria-label="Keiyoushi extensions repository URL" />
+        <button type="button" data-copy>Copy</button>
+      </div>
+    </div>
+    <div class="repo">
+      <div class="r-name">LNReader plugins</div>
+      <div class="r-for">Light novels · LNReader</div>
+      <div class="r-url">
+        <input readonly value="https://raw.githubusercontent.com/LNReader/lnreader-plugins/plugins/v3.0.0/.dist/plugins.min.json" aria-label="LNReader plugins repository URL" />
+        <button type="button" data-copy>Copy</button>
+      </div>
+    </div>
+
+    <div class="note">Only the first is ours. The rest are run by other people — we don't host,
+    endorse or control them, they can change or vanish at any time, and what they contain is not
+    something we choose. If one stops loading, that's the repository, not the app.</div>
+
+    <h3>Anime, movies, manga, novels</h3>
+    <p>The app has separate modes for watching and reading, and the source switcher only offers
+    sources that fit what you're doing. If a mode looks empty, you haven't added a source for
+    <em>that</em> mode yet — the home screen will say so and point you at the right screen.</p>
+  </section>
+  <!-- ─────────────────────────────────────────────────────── -->
+  <section class="doc" id="watch">
+    <h2><span class="num">03</span> Watching something</h2><div class="rule"></div>
+
+    <h3>Find it</h3>
+    <p>Search from the magnifying glass in the bar at the bottom. Results are grouped by source, so
+    you can see at a glance who has the title. The chip at the top of the home screen switches which
+    source you're browsing.</p>
+
+    <h3>Play it</h3>
+    <p>Open a title, pick an episode, and it starts on the first server that responds. If that one
+    is poor, open the sources sheet in the player and pick another — your choice is remembered for
+    that title.</p>
+    <p>In the player you get speed, subtitles and their styling, quality where the stream offers it,
+    and gestures for seek, brightness and volume. Progress is saved automatically, so
+    <strong>Continue watching</strong> on the home screen picks up where you stopped.</p>
+
+    <h3>Save it for offline</h3>
+    <p>Tap the download icon on an episode, or use the batch button on the episode list to grab
+    several at once. Streams that arrive in pieces are stitched into a single playable file, so
+    downloads behave like ordinary videos — including seeking. Downloads live under the
+    <strong>Downloads</strong> section, and you can choose the folder in settings.</p>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────── -->
+  <section class="doc" id="playback">
+    <h2><span class="num">04</span> When something won't play</h2><div class="rule"></div>
+
+    <p>Almost always the source rather than the app. Sites break, move domain, add bot protection or
+    simply go down — and a source written for last month's layout stops working. Work through these
+    in order.</p>
+
+    <h3>1 — Try a different source</h3>
+    <p>Open the same title from another source. If a second one plays, the first is broken and
+    there's nothing to fix on your end.</p>
+
+    <h3>2 — Check source health</h3>
+    <div class="path">Settings → Sources → Source health</div>
+    <p>This tests your installed sources and marks the dead ones. Search puts healthy sources first
+    and skips ones that just failed, so clearing out dead sources genuinely speeds things up.</p>
+
+    <h3>3 — Update your sources</h3>
+    <p>When a site changes, its source usually gets fixed within days. The sources screen shows a
+    badge when updates are available.</p>
+
+    <h3>4 — Cloudflare and ad pages</h3>
+    <p>Some sites sit behind a "checking your browser" screen. The app opens a real browser view so
+    you can complete it — do it once and the result is remembered. A few sources also open an ad
+    page in your browser when resolving a link; that's the source's behaviour, not the app's.</p>
+
+    <h3>Slow to start, or stalls part-way</h3>
+    <ul>
+      <li>Some streams carry a dozen or more audio languages, which can make startup slow. Recent
+      versions handle these much better — make sure you're up to date.</li>
+      <li>Raise the buffer under <strong>Settings → Playback</strong> if playback dips on a weak
+      connection.</li>
+      <li>If one server stalls, open the sources sheet in the player and pick a different one.</li>
+      <li>Still stuck? Try an external player from the player menu.</li>
+    </ul>
+
+    <h3>Quality looks wrong</h3>
+    <p>The quality button lists the resolutions <em>inside the stream you're playing</em>. If a
+    source only offers one file per quality, they appear as separate servers in the sources sheet
+    instead. A source that reports nothing shows no quality button — that's honest rather than
+    broken.</p>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────── -->
+  <section class="doc" id="tv">
+    <h2><span class="num">05</span> On your TV</h2><div class="rule"></div>
+
+    <h3>Installing</h3>
+    <p>Use the <strong>TV</strong> build from releases — many TV boxes and sticks are still 32-bit,
+    and the arm64 phone build will crash on them. Sideload it however you normally do; the app
+    detects the TV and switches to a D-pad interface automatically.</p>
+
+    <h3>Getting around</h3>
+    <p>Everything is built for a remote — arrow keys to move, OK to select, Back to go up. Holding
+    OK on a poster opens its quick menu, the same as a long-press on a phone.</p>
+
+    <h3>Signing in without typing</h3>
+    <p>Typing on a TV is painful, so you scan a code instead.</p>
+    <div class="path">Settings → Connections → Connect</div>
+    <p>Two QR codes appear:</p>
+    <ul>
+      <li><strong>Have the app?</strong> — scan with a phone that has Zangetsu installed. The phone
+      opens, you approve, and the TV is signed in.</li>
+      <li><strong>No app?</strong> — scan with any phone's camera. It opens a web page where you
+      sign in with your browser, and the TV picks it up.</li>
+    </ul>
+    <p>The same flow connects AniList, MyAnimeList and Simkl to the TV.</p>
+
+    <h3>Sources on TV</h3>
+    <p>Sources work exactly as they do on a phone, and the screens are the same ones adapted for a
+    remote. Adding a repository means typing a URL, which is the one genuinely awkward moment — if
+    you use the app on a phone as well, it's easier to get set up there first.</p>
+
+    <h3>Casting instead</h3>
+    <p>If you'd rather not install anything on the TV, cast from your phone to a Chromecast. Some
+    streams need particular headers to play, which the app handles by serving them through the
+    phone — so keep the phone awake and on the same network while casting.</p>
+  </section>
+
+    </div>
+  </div>
+
+  <footer class="wrap">
+    <span>Zangetsu — free and open source, GPL-3.0.</span>
+    <span>
+      <a href="/">Home</a> &nbsp;·&nbsp;
+      <a href="https://github.com/Spyou/Zangetsu">GitHub<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-1px;margin-left:4px"><path d="M8 16L16 8M9 8h7v7"/></svg></a>
+    </span>
+  </footer>
+</div>
+
+<script>
+  // Filter the FAQ as you type. Matches the question and its answer, so
+  // "buffering" finds the entry whose text mentions it even if the heading doesn't.
+  const q = document.getElementById('q');
+  const items = [...document.querySelectorAll('#faq details.qa')];
+  const none = document.getElementById('noresult');
+  const hint = document.getElementById('hint');
+
+  // Copy buttons on the repository list.
+  for (const b of document.querySelectorAll('.repo button[data-copy]')) {
+    b.addEventListener('click', async () => {
+      const input = b.previousElementSibling;
+      try {
+        await navigator.clipboard.writeText(input.value);
+      } catch {
+        // clipboard API needs https + permission; select the text so the user
+        // can copy it by hand rather than getting nothing.
+        input.select();
+        b.textContent = 'Select + copy';
+        return;
+      }
+      const was = b.textContent;
+      b.textContent = 'Copied';
+      setTimeout(() => { b.textContent = was; }, 1600);
+    });
+  }
+
+  const searchBox = document.querySelector('.search');
+  const clearBtn = document.getElementById('clear');
+  clearBtn.addEventListener('click', () => {
+    q.value = '';
+    q.dispatchEvent(new Event('input'));
+    q.focus();
+  });
+
+  q.addEventListener('input', () => {
+    const term = q.value.trim().toLowerCase();
+    searchBox.classList.toggle('filled', q.value.length > 0);
+    let shown = 0;
+    for (const el of items) {
+      const hit = !term || el.textContent.toLowerCase().includes(term);
+      el.style.display = hit ? '' : 'none';
+      if (hit) shown++;
+      // Open matches while searching so the answer is visible without a second tap.
+      if (term && hit) el.open = true;
+      if (!term) el.open = false;
+    }
+    none.style.display = shown ? 'none' : 'block';
+    hint.textContent = term
+      ? shown + (shown === 1 ? ' answer' : ' answers') + ' \u2014 full sections below'
+      : 'The dozen we\u2019re asked most.';
+    // Fade sections that don't mention the term, so the eye lands on the ones that do.
+    for (const sec of document.querySelectorAll('section.doc')) {
+      sec.style.opacity = (!term || sec.textContent.toLowerCase().includes(term)) ? '' : '.32';
+    }
+  });
+
+  // "/" jumps to search, Escape clears it — expected on a docs page.
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '/' && document.activeElement !== q) { e.preventDefault(); q.focus(); }
+    if (e.key === 'Escape' && document.activeElement === q) {
+      q.value = ''; q.dispatchEvent(new Event('input')); q.blur();
+    }
+  });
+
+  // Scroll spy — highlight whichever section you're reading.
+  const tocLinks = [...document.querySelectorAll('#toc a')];
+  const spy = new IntersectionObserver((entries) => {
+    for (const en of entries) {
+      if (!en.isIntersecting) continue;
+      for (const a of tocLinks) {
+        a.classList.toggle('on', a.getAttribute('href') === '#' + en.target.id);
+      }
+    }
+  }, { rootMargin: '-88px 0px -68% 0px' });
+  for (const a of tocLinks) {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) spy.observe(t);
+  }
+
+  // Back to top.
+  const toTop = document.getElementById('toTop');
+  addEventListener('scroll', () => {
+    toTop.classList.toggle('show', scrollY > 700);
+  }, { passive: true });
+  toTop.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
+</script>
+<button class="toTop" id="toTop" aria-label="Back to top"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V6M6 12l6-6 6 6"/></svg></button>
+</body>
+</html>
