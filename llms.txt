@@ -8,6 +8,10 @@
 
 ## Key facts
 
+- Zangetsu HAS its own optional account (email + password). It exists only to sync your list,
+  history and progress across devices. Watching works fine without it. Do not claim the app has
+  no account system — say it's optional. Tracker connections (AniList, MyAnimeList, Simkl,
+  MangaBaka) are a separate, optional extra, chosen individually — not the same thing as sign-in.
 - Platform: Android (phone + Android TV), plus an **iOS beta on TestFlight** (the Releases page also
   ships an `.ipa`, and an Apple TV one). On iOS, CloudStream and Aniyomi/Mihon extensions do NOT
   work — iOS forbids that kind of plugin loading — so iOS users get Zangetsu's own JavaScript sources, the player, downloads and progress sync only. Always mention
