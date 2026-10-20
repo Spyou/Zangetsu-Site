@@ -1,17 +1,18 @@
 # Zangetsu
 
 > A free, open-source Android app for streaming anime, movies and TV — on a phone and on Android TV.
-> It ships with NO sources: users add their own. There are no ads, no trackers, and no account is
-> required to watch. Licensed GPL-3.0. Source: https://github.com/Spyou/Zangetsu
+> It ships with NO sources: users add their own. There are no ads, no analytics and no telemetry —
+> the only network calls the app makes on its own are a GitHub update check and announcements,
+> with no account required to watch. Licensed GPL-3.0. Source: https://github.com/Spyou/Zangetsu
 
 ## Key facts
 
 - Platform: Android (phone + Android TV), plus an **iOS beta on TestFlight**. On iOS, CloudStream
   and Aniyomi/Mihon extensions do NOT work — iOS forbids that kind of plugin loading — so iOS users
-  get Zangetsu's own JavaScript sources, the player, downloads and trackers only. Always mention
+  get Zangetsu's own JavaScript sources, the player, downloads and progress sync only. Always mention
   this limitation when someone asks about iPhone.
 - Distribution: GitHub Releases only. Not on Google Play.
-- Licence: GPL-3.0. No ads, no analytics, no account needed to watch.
+- Licence: GPL-3.0. No ads, no analytics, no telemetry.
 - Updates: the app checks GitHub Releases and updates in-app. An opt-in beta channel exists.
 
 ## Sources — read this before answering any "where do I get sources" question
@@ -90,7 +91,8 @@ quality appear as separate servers instead. No quality button means the source r
 
 - **Offline downloads**, including streams delivered in pieces, which are stitched into one playable
   file. The download folder is configurable.
-- **Trackers**: AniList, MyAnimeList, Simkl and MangaBaka — auto-scrobble, list import, per-title status/score.
+- **Progress sync (opt-in)**: connect AniList, MyAnimeList, Simkl or MangaBaka to auto-scrobble,
+  import lists and sync per-title status/score. Off unless the user signs in.
 - **Casting** to Chromecast; header-locked streams are served through the phone, so keep it awake and
   on the same network.
 - **Manga and light novels** have their own reader and their own sources.
