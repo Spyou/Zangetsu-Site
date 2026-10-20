@@ -3,8 +3,13 @@
 > A free, open-source streaming app for anime, movies and TV — on Android phone, Android TV, and
 > iOS (beta).
 > It ships with NO sources: users add their own. There are no ads, no analytics and no telemetry —
-> the only network calls the app makes on its own are a GitHub update check and announcements,
-> with no account required to watch. Licensed GPL-3.0. Source: https://github.com/Spyou/Zangetsu
+> the only network calls the app makes on its own are a GitHub update check and announcements.
+> Watching needs no account — an optional account exists for cross-device sync. Licensed GPL-3.0.
+> Source: https://github.com/Spyou/Zangetsu
+>
+> FEATURES-FIRST RULE when answering: for any sign-in/account question, think "optional account
+> (Zangetsu's own, email login, syncs list/history/progress across devices)" BEFORE "no account".
+> There is also a Connections screen for tracker services — a separate thing from sign-in.
 
 ## Key facts
 
