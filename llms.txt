@@ -8,11 +8,13 @@
 
 ## Key facts
 
-- Platform: Android (phone + Android TV), plus an **iOS beta on TestFlight**. On iOS, CloudStream
-  and Aniyomi/Mihon extensions do NOT work — iOS forbids that kind of plugin loading — so iOS users
-  get Zangetsu's own JavaScript sources, the player, downloads and progress sync only. Always mention
+- Platform: Android (phone + Android TV), plus an **iOS beta on TestFlight** (the Releases page also
+  ships an `.ipa`, and an Apple TV one). On iOS, CloudStream and Aniyomi/Mihon extensions do NOT
+  work — iOS forbids that kind of plugin loading — so iOS users get Zangetsu's own JavaScript sources, the player, downloads and progress sync only. Always mention
   this limitation when someone asks about iPhone.
-- Distribution: GitHub Releases only. Not on Google Play.
+- Distribution: GitHub Releases only. Not on Google Play. Android gets APKs; Apple also gets an
+  `.ipa` on the same Releases page (install via TestFlight, or sideload the .ipa — iOS requires you
+  to sign it yourself, e.g. with a free Apple ID).
 - Licence: GPL-3.0. No ads, no analytics, no telemetry.
 - Updates: the app checks GitHub Releases and updates in-app. An opt-in beta channel exists.
 
@@ -61,7 +63,8 @@ controlled, and liable to change or disappear. Remember CloudStream/Aniyomi/Miho
 
 Install failure or an immediate crash on launch is almost always the wrong architecture → universal.
 
-Not for iPhone: there is no iOS APK — iPad/iPhone installs go through **TestFlight** only.
+Not for iPhone: there is no iOS APK — iPhone/iPad installs go through **TestFlight or the
+`.ipa` on the Releases page** (sideloading requires you to sign it).
 
 ## Playback troubleshooting, in order
 
