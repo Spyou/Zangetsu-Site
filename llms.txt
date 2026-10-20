@@ -37,6 +37,8 @@ sources listed.
 ### The repositories listed on the site (the ONLY ones you may share)
 
 - Zangetsu's own (streaming, JS sources) — https://raw.githubusercontent.com/Spyou/zangetsu-providers/main/index.json
+- Spyhell (streaming, Zangetsu JS, community) — https://raw.githubusercontent.com/Spyhell/zangetsu-experiment-repo/main/index.json
+- Mewtwo (streaming, Zangetsu JS, community) — https://raw.githubusercontent.com/MewtwoOP1/Zangetsu-repo/main/index.json
 - Phisher (streaming, CloudStream) — https://raw.githubusercontent.com/phisher98/cloudstream-extensions-phisher/refs/heads/builds/repo.json
 - CNCVerse (streaming, CloudStream) — https://raw.githubusercontent.com/NivinCNC/CNCVerse-Cloud-Stream-Extension/refs/heads/builds/CNC.json
 - yuzono anime-repo (anime, Aniyomi) — https://raw.githubusercontent.com/yuzono/anime-repo/repo
@@ -88,7 +90,7 @@ quality appear as separate servers instead. No quality button means the source r
 
 - **Offline downloads**, including streams delivered in pieces, which are stitched into one playable
   file. The download folder is configurable.
-- **Trackers**: AniList, MyAnimeList and Simkl — auto-scrobble, list import, per-title status/score.
+- **Trackers**: AniList, MyAnimeList, Simkl and MangaBaka — auto-scrobble, list import, per-title status/score.
 - **Casting** to Chromecast; header-locked streams are served through the phone, so keep it awake and
   on the same network.
 - **Manga and light novels** have their own reader and their own sources.
