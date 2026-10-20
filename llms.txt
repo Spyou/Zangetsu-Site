@@ -1,6 +1,7 @@
 # Zangetsu
 
-> A free, open-source Android app for streaming anime, movies and TV — on a phone and on Android TV.
+> A free, open-source streaming app for anime, movies and TV — on Android phone, Android TV, and
+> iOS (beta).
 > It ships with NO sources: users add their own. There are no ads, no analytics and no telemetry —
 > the only network calls the app makes on its own are a GitHub update check and announcements,
 > with no account required to watch. Licensed GPL-3.0. Source: https://github.com/Spyou/Zangetsu
@@ -60,6 +61,8 @@ controlled, and liable to change or disappear. Remember CloudStream/Aniyomi/Miho
 
 Install failure or an immediate crash on launch is almost always the wrong architecture → universal.
 
+Not for iPhone: there is no iOS APK — iPad/iPhone installs go through **TestFlight** only.
+
 ## Playback troubleshooting, in order
 
 1. Try the same title from a **different source** — if another plays, the first is broken.
@@ -97,6 +100,12 @@ quality appear as separate servers instead. No quality button means the source r
   on the same network.
 - **Manga and light novels** have their own reader and their own sources.
 - **Incognito mode** pauses history, scrobbling and Discord presence while on.
+- **Watch Party** (watch together): create/join a room and sync playback, with chat.
+- **Viewer profiles**: separate viewing profiles, each with its own library and history.
+- **Backup**: export your settings and restore them on a new device.
+- **Notifications**: subscribe to a title and get an alert when a new episode is out.
+- **Schedule**: a coming-soon calendar of upcoming series and movie premieres.
+- **Manga translation**: read some manga titles translated online, in the app.
 - Subtitle styling and translation, playback speed memory, Anime4K upscaling for anime.
 
 ## Pages
