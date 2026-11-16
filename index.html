@@ -439,21 +439,54 @@
         return;
       }
 
-      // Real recovery link → load the SDK now. Keep submit disabled until the
-      // client exists so the form can never fire before Supabase is ready.
-      var sb = null;
+      var authUrl = SUPABASE_URL, authKey = SUPABASE_ANON;
+      var accessToken = hp.get("access_token"), refreshToken = hp.get("refresh_token");
+      try {
+        var useVps = false;
+        if (tokenHash) {
+          if (accessToken || (qp.has("auth") && qp.get("auth") !== "cloud" && qp.get("auth") !== "vps")) throw new Error("Invalid reset link");
+          useVps = qp.get("auth") === "vps";
+        } else {
+          if (!accessToken || !refreshToken || hp.get("type") !== "recovery") throw new Error("Invalid reset link");
+          var pieces = accessToken.split(".");
+          if (pieces.length !== 3) throw new Error("Invalid reset link");
+          var payload = pieces[1].replace(/-/g, "+").replace(/_/g, "/");
+          var issuer = JSON.parse(atob(payload.padEnd(Math.ceil(payload.length / 4) * 4, "="))).iss;
+          if (issuer === "https://sb.zangetsu.online/auth/v1") useVps = true;
+          else if (issuer !== SUPABASE_URL + "/auth/v1") throw new Error("Unknown reset link");
+        }
+        // The issuer selects a fixed server; that server still validates the token.
+        if (useVps) {
+          authUrl = "https://sb.zangetsu.online";
+          authKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzk0ODIwNzM3LCJleHAiOjIxMTAxODA3Mzd9.S8o9Tc1kJ3P2Af7rWDrjI6XghG21J7y_XINgB9iAg3w";
+        }
+      } catch (e) {
+        msg.className = "msg err";
+        msg.textContent = "Invalid reset link. Request a new one from the app.";
+        btn.disabled = true;
+        return;
+      }
+
+      var sb = null, recoveryReady = false;
       btn.disabled = true;
       loadSupabase(function (err) {
         if (err) { msg.className = "msg err"; msg.textContent = "Couldn't load the reset library — check your connection and reload the page."; return; }
-        btn.disabled = false;
-        sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON, { auth: { detectSessionInUrl: true, flowType: "implicit" } });
-        // token_hash flow: verify it to establish the recovery session (JS-only, so
-        // an email link-scanner GET can't consume the single-use token).
-        if (tokenHash) {
-          sb.auth.verifyOtp({ token_hash: tokenHash, type: "recovery" }).then(function (r) {
-            if (r.error) { msg.className = "msg err"; msg.textContent = "This link has expired. Request a new reset email from the app."; btn.disabled = true; }
-          });
-        }
+        sb = supabase.createClient(authUrl, authKey, { auth: { detectSessionInUrl: false, persistSession: false, autoRefreshToken: false, flowType: "implicit" } });
+        var verification = tokenHash
+          ? sb.auth.verifyOtp({ token_hash: tokenHash, type: "recovery" })
+          : sb.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
+        verification.then(function (r) {
+          if (r.error || !r.data || !r.data.session) throw new Error("Invalid recovery session");
+          return sb.auth.getUser();
+        }).then(function (r) {
+          if (r.error || !r.data || !r.data.user) throw new Error("Invalid recovery user");
+          recoveryReady = true;
+          btn.disabled = false;
+        }).catch(function () {
+          msg.className = "msg err";
+          msg.textContent = "This link has expired or couldn't be verified. Request a new reset email from the app.";
+          btn.disabled = true;
+        });
       });
 
       form.addEventListener("submit", function (e) {
@@ -462,16 +495,14 @@
         msg.className = "msg";
         if (pw.length < 8) { msg.className = "msg err"; msg.textContent = "Password must be at least 8 characters."; return; }
         if (pw !== pw2) { msg.className = "msg err"; msg.textContent = "Passwords do not match."; return; }
-        if (!sb) { msg.className = "msg err"; msg.textContent = "Still loading — try again in a second."; return; }
+        if (!recoveryReady) { msg.className = "msg err"; msg.textContent = "Verify your reset link before updating the password."; return; }
         btn.disabled = true; msg.textContent = "Updating…";
         sb.auth.updateUser({ password: pw }).then(function (res) {
           if (res.error) {
             msg.className = "msg err"; msg.textContent = res.error.message || "Reset failed — the link may have expired. Request a new one.";
             btn.disabled = false;
           } else {
-            // A deliberate reset must WIN over the migration's old-password
-            // "heal" (which would otherwise re-sync the old Appwrite password on
-            // the next old-password login). Clearing the capture flag stops that.
+            // Keep legacy password capture from overwriting the chosen password.
             var uid = res.data && res.data.user && res.data.user.id;
             if (uid) { try { sb.from("profiles").update({ needs_password_capture: false }).eq("id", uid).then(function () {}, function () {}); } catch (e) {} }
             form.querySelectorAll("input,button").forEach(function (el) { el.disabled = true; });
