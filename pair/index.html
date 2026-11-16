@@ -115,12 +115,14 @@
   <div class="wrap" id="app"></div>
 
   <script>
-  const SUPA = "https://eogwzrlfoercfwcfwlmv.supabase.co";
-  const ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVvZ3d6cmxmb2VyY2Z3Y2Z3bG12Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjgzODIsImV4cCI6MjA5OTk0NDM4Mn0.qr-nHnB9vb7BodP55XJ9-6Rwp__eOGCS6txhLiuWVZw";
+  const params = new URLSearchParams(location.search);
+  const auth = params.get("auth");
+  const validAuth = params.getAll("auth").length <= 1 && (auth === null || auth === "cloud" || auth === "vps");
+  const SUPA = auth === "vps" ? "https://sb.zangetsu.online" : "https://eogwzrlfoercfwcfwlmv.supabase.co";
+  const ANON = auth === "vps" ? "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzk0ODIwNzM3LCJleHAiOjIxMTAxODA3Mzd9.S8o9Tc1kJ3P2Af7rWDrjI6XghG21J7y_XINgB9iAg3w" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVvZ3d6cmxmb2VyY2Z3Y2Z3bG12Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjgzODIsImV4cCI6MjA5OTk0NDM4Mn0.qr-nHnB9vb7BodP55XJ9-6Rwp__eOGCS6txhLiuWVZw";
   const FN = SUPA + "/functions/v1/pair-tv";
   const ANDROID_PKG = "com.spyou.watch_app";
 
-  const params = new URLSearchParams(location.search);
   let code = (params.get("code") || "").trim().toUpperCase();
   const nonce = params.get("nonce");
   const trackersOnly = params.get("trackers") === "1";
@@ -149,6 +151,7 @@
     var q = "code=" + encodeURIComponent(code);
     if (nonce) q += "&nonce=" + encodeURIComponent(nonce);
     if (trackersOnly) q += "&trackers=1";
+    if (auth === "vps") q += "&auth=vps";
     return q;
   }
 
@@ -174,6 +177,10 @@
   }
 
   function render() {
+    if (!validAuth) {
+      app.innerHTML = "<h1>Invalid pairing link</h1><p class=\"sub\">Scan the QR code on your TV again.</p>";
+      return;
+    }
     if (trackersOnly && code) {
       app.innerHTML =
         "<h1>Connect a tracker</h1>" +
@@ -317,7 +324,7 @@
   }
 
   async function lookup() {
-    if (!code || trackersOnly) return;
+    if (!validAuth || !code || trackersOnly) return;
     try {
       const res = await callFn({ action: "info", code: code });
       if (res && res.ok && res.deviceName) {
@@ -329,7 +336,7 @@
 
   async function onSubmit(e) {
     e.preventDefault();
-    if (busy) return;
+    if (!validAuth || busy) return;
     error = ""; okmsg = "";
     const email = (document.getElementById("email").value || "").trim();
     const passwordEl = document.getElementById("password");

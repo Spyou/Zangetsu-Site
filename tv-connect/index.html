@@ -50,8 +50,8 @@
 
   <script>
   // ── Config (all public: anon key + client ids are already shipped in the app) ──
-  const SUPA_FN = "https://eogwzrlfoercfwcfwlmv.supabase.co/functions/v1/pair-tv";
-  const ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVvZ3d6cmxmb2VyY2Z3Y2Z3bG12Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjgzODIsImV4cCI6MjA5OTk0NDM4Mn0.qr-nHnB9vb7BodP55XJ9-6Rwp__eOGCS6txhLiuWVZw";
+  let SUPA_FN = "https://eogwzrlfoercfwcfwlmv.supabase.co/functions/v1/pair-tv";
+  let ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVvZ3d6cmxmb2VyY2Z3Y2Z3bG12Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjgzODIsImV4cCI6MjA5OTk0NDM4Mn0.qr-nHnB9vb7BodP55XJ9-6Rwp__eOGCS6txhLiuWVZw";
   const REDIRECT = "https://zangetsu.online/tv-connect/";
   const CLIENTS = {
     anilist: "48181",
@@ -59,6 +59,13 @@
     simkl: "8b847b09206ccdb0b3de4cc1293d6dd7d355821f5c179c57315da8ba9030eb53",
   };
   const LABEL = { anilist: "AniList", mal: "MyAnimeList", simkl: "Simkl" };
+
+  function selectBackend(auth) {
+    if (auth !== null && auth !== undefined && auth !== "cloud" && auth !== "vps") return false;
+    SUPA_FN = (auth === "vps" ? "https://sb.zangetsu.online" : "https://eogwzrlfoercfwcfwlmv.supabase.co") + "/functions/v1/pair-tv";
+    ANON = auth === "vps" ? "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzk0ODIwNzM3LCJleHAiOjIxMTAxODA3Mzd9.S8o9Tc1kJ3P2Af7rWDrjI6XghG21J7y_XINgB9iAg3w" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVvZ3d6cmxmb2VyY2Z3Y2Z3bG12Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjgzODIsImV4cCI6MjA5OTk0NDM4Mn0.qr-nHnB9vb7BodP55XJ9-6Rwp__eOGCS6txhLiuWVZw";
+    return true;
+  }
 
   // ── UI helpers ──────────────────────────────────────────────────────────────
   function ui(icon, title, msg, cls) {
@@ -130,6 +137,8 @@
   async function main() {
     const q = new URLSearchParams(location.search);
     const frag = new URLSearchParams(location.hash.replace(/^#/, ""));
+    const auth = q.get("auth");
+    if (q.getAll("auth").length > 1 || !selectBackend(auth)) return fail("Invalid pairing link. Scan the QR code on your TV again.");
 
     // First visit from the TV QR: ?code&nonce&tracker present → stash + go to OAuth.
     if (q.get("nonce") && q.get("code") && q.get("tracker")) {
@@ -137,7 +146,7 @@
       if (!CLIENTS[tracker]) return fail("Unknown tracker.");
       const verifier = tracker === "mal" ? randToken(64) : null;
       sessionStorage.setItem("tvpair", JSON.stringify({
-        code: q.get("code"), nonce: q.get("nonce"), tracker, verifier,
+        code: q.get("code"), nonce: q.get("nonce"), tracker, verifier, auth,
       }));
       const u = REDIRECT;
       if (tracker === "anilist") {
@@ -160,6 +169,7 @@
     // Coming back from the provider.
     const saved = JSON.parse(sessionStorage.getItem("tvpair") || "null");
     if (saved) {
+      if (!selectBackend(saved.auth)) return fail("Invalid pairing link. Scan the QR code on your TV again.");
       working("Finishing sign-in…", "Sending " + (LABEL[saved.tracker] || "tracker") + " to your TV.");
       try {
         // All three use the auth-code grant, so the provider redirected back
