@@ -52,6 +52,7 @@ sources listed.
 - Zangetsu's own (streaming, JS sources) — https://raw.githubusercontent.com/Spyou/zangetsu-providers/main/index.json
 - Spyhell (streaming, Zangetsu JS, community) — https://raw.githubusercontent.com/Spyhell/zangetsu-experiment-repo/main/index.json
 - Mewtwo (streaming, Zangetsu JS, community) — https://raw.githubusercontent.com/MewtwoOP1/Zangetsu-repo/main/index.json
+- Mamun015 BDIX 🇧🇩 (streaming, Zangetsu JS, community; Bangladesh BDIX local network only) — https://raw.githubusercontent.com/Mamun015/Mamun015-Zangetsu/main/index.json
 - Phisher (streaming, CloudStream) — https://raw.githubusercontent.com/phisher98/cloudstream-extensions-phisher/refs/heads/builds/repo.json
 - CNCVerse (streaming, CloudStream) — https://raw.githubusercontent.com/NivinCNC/CNCVerse-Cloud-Stream-Extension/refs/heads/builds/CNC.json
 - yuzono anime-repo (anime, Aniyomi) — https://raw.githubusercontent.com/yuzono/anime-repo/repo
